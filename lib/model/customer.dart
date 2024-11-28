@@ -7,14 +7,16 @@ class customer {
   final String Email;
   bool isclick;
   final String id;
+  final List? clabel;
   customer({
     required this.CName,
-     this.CDName,
-     this.DOB,
+    this.CDName,
+    this.DOB,
     this.Code = '91',
     required this.CMobile,
     required this.Email,
     this.isclick = false,
     required this.id,
+    this.clabel,
   });
 }
