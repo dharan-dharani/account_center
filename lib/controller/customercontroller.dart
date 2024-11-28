@@ -105,13 +105,22 @@ class CustomerController {
   Future<void> fetchlist() async {
     try {
       List<customer> fetcheddetails = await api.apiconnection();
-   
+
       customerdata = fetcheddetails;
       filteredData = customerdata;
     } catch (e) {
       print('Error fetching products: $e');
     }
   }
+
+  // Future<void> labellist() async {
+  //   try {
+  //     List<String> list = await api.labellists();
+  //     addlist = list;
+  //   } catch (e) {
+  //     print('Error fetching products: $e');
+  //   }
+  // }
 
   Future<String?> getToken() async {
     SharedPreferences preferences = await SharedPreferences.getInstance();
@@ -132,7 +141,6 @@ class CustomerController {
         "dob": DOB,
       };
       String? body = json.encode(data);
-  
 
       var response = await http.post(
         url,
@@ -142,7 +150,8 @@ class CustomerController {
         },
         body: body,
       );
-
+      print(response.statusCode);
+      print(response.body);
       if (response.statusCode == 200) {
         ScaffoldMessenger.of(context)
             .showSnackBar(const SnackBar(content: Text('send Sucessfull')));
@@ -173,7 +182,7 @@ class CustomerController {
         body: body,
       );
       print(body);
-    
+
       if (response.statusCode == 200) {
         ScaffoldMessenger.of(context)
             .showSnackBar(const SnackBar(content: Text('Update Sucessfull')));
@@ -195,7 +204,7 @@ class CustomerController {
         "id": id,
       };
       String? body = json.encode(data);
-      print(body);
+
       var response = await http.post(
         url,
         headers: <String, String>{

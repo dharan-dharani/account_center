@@ -1,4 +1,4 @@
-import 'package:account_center/login.dart';
+import 'package:account_center/masfob.dart';
 import 'package:flutter/material.dart';
 
 void main() {
@@ -17,7 +17,7 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.teal),
         useMaterial3: false,
       ),
-      home: const Login(),
+      home: const Masfob(),
     );
   }
 }

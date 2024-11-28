@@ -1,4 +1,5 @@
 import 'package:account_center/constant.dart';
+import 'package:account_center/controller/api/apiconnection.dart';
 import 'package:account_center/controller/customercontroller.dart';
 import 'package:account_center/model/customer.dart';
 import 'package:flutter/material.dart';
@@ -13,11 +14,13 @@ class Customers extends StatefulWidget {
 }
 
 CustomerController customerController = CustomerController();
+Api api = Api();
 
 class CustomerState extends State<Customers> {
   @override
   void initState() {
     super.initState();
+    api.labellists();
     customerController.filteredData = customerController.customerdata;
     customerController.fetchlist().then((_) {
       setState(() {
@@ -97,7 +100,7 @@ class CustomerState extends State<Customers> {
                         Row(
                           children: [
                             customerController.listOfCustomer.isEmpty
-                                ? const Icon(Icons.person_2_outlined, size: 30)
+                                ? const Icon(Icons.person, size: 30)
                                 : Text(
                                     '${customerController.listOfCustomer.length}',
                                     style: const TextStyle(
@@ -122,7 +125,7 @@ class CustomerState extends State<Customers> {
                           child: TextFormField(
                             controller: customerController.search,
                             decoration: InputDecoration(
-                              fillColor: primaryLightColor,
+                              fillColor: white,
                               filled: true,
                               hintText: 'Search',
                               prefixIcon: const Icon(Icons.search),
@@ -138,14 +141,14 @@ class CustomerState extends State<Customers> {
                               contentPadding: const EdgeInsets.symmetric(
                                   vertical: 5, horizontal: 5),
                               enabledBorder: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(30),
-                                borderSide:
-                                    const BorderSide(color: primaryLightColor),
+                                borderRadius: BorderRadius.circular(10),
+                                borderSide: const BorderSide(
+                                    color: primaryColor, width: 2.0),
                               ),
                               focusedBorder: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(30),
+                                borderRadius: BorderRadius.circular(10),
                                 borderSide: const BorderSide(
-                                    color: primaryLightColor, width: 2.0),
+                                    color: primaryColor, width: 2.0),
                               ),
                             ),
                             onChanged: (query) {
@@ -171,7 +174,7 @@ class CustomerState extends State<Customers> {
                                 side: const BorderSide(
                                     color: primaryColor, width: 2),
                                 shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(30))),
+                                    borderRadius: BorderRadius.circular(10))),
                             child: Text(
                                 customerController.isSelectAll ||
                                         customerController
@@ -203,7 +206,7 @@ class CustomerState extends State<Customers> {
                                 side: const BorderSide(
                                     color: primaryColor, width: 2),
                                 shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(30))),
+                                    borderRadius: BorderRadius.circular(10))),
                             child: Text(
                                 customerController.isSelectAll ||
                                         customerController
@@ -327,27 +330,30 @@ class CustomerState extends State<Customers> {
                                                 controller:
                                                     customerController.list,
                                                 decoration: InputDecoration(
-                                                  fillColor: primaryLightColor,
+                                                  fillColor: white,
                                                   filled: true,
                                                   labelText: 'List Name',
+                                                  labelStyle:
+                                                      TextStyle(color: black),
                                                   enabledBorder:
                                                       OutlineInputBorder(
                                                     borderRadius:
                                                         BorderRadius.circular(
-                                                            30),
-                                                    borderSide: const BorderSide(
-                                                        color:
-                                                            primaryLightColor),
+                                                            10),
+                                                    borderSide:
+                                                        const BorderSide(
+                                                            color: primaryColor,
+                                                            width: 2),
                                                   ),
                                                   focusedBorder:
                                                       OutlineInputBorder(
                                                     borderRadius:
                                                         BorderRadius.circular(
-                                                            30),
-                                                    borderSide: const BorderSide(
-                                                        color:
-                                                            primaryLightColor,
-                                                        width: 2.0),
+                                                            10),
+                                                    borderSide:
+                                                        const BorderSide(
+                                                            color: primaryColor,
+                                                            width: 2.0),
                                                   ),
                                                 ),
                                               ),
@@ -371,7 +377,7 @@ class CustomerState extends State<Customers> {
                                                               borderRadius:
                                                                   BorderRadius
                                                                       .circular(
-                                                                          30))),
+                                                                          10))),
                                                       child: const Text(
                                                           'Cancel',
                                                           style: TextStyle(
@@ -384,14 +390,6 @@ class CustomerState extends State<Customers> {
                                                   const SizedBox(width: 10),
                                                   OutlinedButton(
                                                       onPressed: () {
-                                                        setState(() {
-                                                          customerController
-                                                              .addlist
-                                                              .add(
-                                                                  customerController
-                                                                      .list
-                                                                      .text);
-                                                        });
                                                         Navigator.pop(context);
                                                       },
                                                       style: OutlinedButton.styleFrom(
@@ -407,7 +405,7 @@ class CustomerState extends State<Customers> {
                                                               borderRadius:
                                                                   BorderRadius
                                                                       .circular(
-                                                                          30))),
+                                                                          10))),
                                                       child: const Text(
                                                           'Add List',
                                                           style:
@@ -429,7 +427,7 @@ class CustomerState extends State<Customers> {
                                   side: const BorderSide(
                                       color: primaryColor, width: 2),
                                   shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(30))),
+                                      borderRadius: BorderRadius.circular(10))),
                               child: const Text('Add List',
                                   style: TextStyle(
                                       color: primaryColor,
@@ -444,7 +442,7 @@ class CustomerState extends State<Customers> {
                       height: 40,
                       child: TextFormField(
                         decoration: InputDecoration(
-                          fillColor: primaryLightColor,
+                          fillColor: white,
                           filled: true,
                           hintText: 'Search List',
                           prefixIcon: const Icon(Icons.search),
@@ -453,21 +451,21 @@ class CustomerState extends State<Customers> {
                           contentPadding: const EdgeInsets.symmetric(
                               vertical: 5, horizontal: 5),
                           enabledBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(30),
+                            borderRadius: BorderRadius.circular(10),
                             borderSide:
-                                const BorderSide(color: primaryLightColor),
+                                const BorderSide(color: primaryColor, width: 2),
                           ),
                           focusedBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(30),
+                            borderRadius: BorderRadius.circular(10),
                             borderSide: const BorderSide(
-                                color: primaryLightColor, width: 2.0),
+                                color: primaryColor, width: 2.0),
                           ),
                         ),
                       ),
                     ),
                     Expanded(
                       child: ListView.builder(
-                          itemCount: customerController.addlist.length,
+                          itemCount: customerController.customerdata.length,
                           itemBuilder: (context, index) {
                             return Padding(
                               padding: const EdgeInsets.all(8.0),
@@ -489,8 +487,7 @@ class CustomerState extends State<Customers> {
                                     backgroundColor: primaryColor,
                                     maxRadius: 20,
                                   ),
-                                  title:
-                                      Text(customerController.addlist[index]),
+                                  // title: Text(list?[index]),
                                   subtitle: const Text(
                                     '(0) Contacts',
                                     style: TextStyle(
@@ -538,27 +535,28 @@ class CustomerState extends State<Customers> {
                       },
                       decoration: InputDecoration(
                         labelText: 'Customer Name',
+                        labelStyle: TextStyle(color: black),
                         enabledBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(30),
+                          borderRadius: BorderRadius.circular(10),
                           borderSide:
-                              const BorderSide(color: primaryLightColor),
+                              const BorderSide(color: primaryColor, width: 2),
                         ),
                         focusedBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(30),
-                          borderSide: const BorderSide(
-                              color: primaryLightColor, width: 2.0),
+                          borderRadius: BorderRadius.circular(10),
+                          borderSide:
+                              const BorderSide(color: primaryColor, width: 2.0),
                         ),
                         errorBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(30),
+                          borderRadius: BorderRadius.circular(10),
                           borderSide:
-                              const BorderSide(color: primaryLightColor),
+                              const BorderSide(color: primaryColor, width: 2),
                         ),
                         focusedErrorBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(30),
-                          borderSide: const BorderSide(
-                              color: primaryLightColor, width: 2.0),
+                          borderRadius: BorderRadius.circular(10),
+                          borderSide:
+                              const BorderSide(color: primaryColor, width: 2.0),
                         ),
-                        fillColor: primaryLightColor,
+                        fillColor: white,
                         filled: true,
                       ),
                     ),
@@ -573,27 +571,28 @@ class CustomerState extends State<Customers> {
                       },
                       decoration: InputDecoration(
                         labelText: 'Customer Display Name',
+                        labelStyle: TextStyle(color: black),
                         enabledBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(30),
+                          borderRadius: BorderRadius.circular(10),
                           borderSide:
-                              const BorderSide(color: primaryLightColor),
+                              const BorderSide(color: primaryColor, width: 2),
                         ),
                         focusedBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(30),
-                          borderSide: const BorderSide(
-                              color: primaryLightColor, width: 2.0),
+                          borderRadius: BorderRadius.circular(10),
+                          borderSide:
+                              const BorderSide(color: primaryColor, width: 2.0),
                         ),
                         errorBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(30),
+                          borderRadius: BorderRadius.circular(10),
                           borderSide:
-                              const BorderSide(color: primaryLightColor),
+                              const BorderSide(color: primaryColor, width: 2),
                         ),
                         focusedErrorBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(30),
-                          borderSide: const BorderSide(
-                              color: primaryLightColor, width: 2.0),
+                          borderRadius: BorderRadius.circular(10),
+                          borderSide:
+                              const BorderSide(color: primaryColor, width: 2.0),
                         ),
-                        fillColor: primaryLightColor,
+                        fillColor: white,
                         filled: true,
                       ),
                     ),
@@ -608,6 +607,7 @@ class CustomerState extends State<Customers> {
                       },
                       decoration: InputDecoration(
                         labelText: 'Date of Birth',
+                        labelStyle: TextStyle(color: black),
                         suffixIcon: IconButton(
                             onPressed: () {
                               customerController
@@ -618,26 +618,26 @@ class CustomerState extends State<Customers> {
                             },
                             icon: const Icon(Icons.calendar_month_outlined)),
                         enabledBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(30),
+                          borderRadius: BorderRadius.circular(10),
                           borderSide:
-                              const BorderSide(color: primaryLightColor),
+                              const BorderSide(color: primaryColor, width: 2),
                         ),
                         focusedBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(30),
-                          borderSide: const BorderSide(
-                              color: primaryLightColor, width: 2.0),
+                          borderRadius: BorderRadius.circular(10),
+                          borderSide:
+                              const BorderSide(color: primaryColor, width: 2),
                         ),
                         errorBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(30),
+                          borderRadius: BorderRadius.circular(10),
                           borderSide:
-                              const BorderSide(color: primaryLightColor),
+                              const BorderSide(color: primaryColor, width: 2),
                         ),
                         focusedErrorBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(30),
-                          borderSide: const BorderSide(
-                              color: primaryLightColor, width: 2.0),
+                          borderRadius: BorderRadius.circular(10),
+                          borderSide:
+                              const BorderSide(color: primaryColor, width: 2),
                         ),
-                        fillColor: primaryLightColor,
+                        fillColor: white,
                         filled: true,
                       ),
                     ),
@@ -657,27 +657,28 @@ class CustomerState extends State<Customers> {
                             },
                             decoration: InputDecoration(
                               labelText: 'Code',
+                              labelStyle: TextStyle(color: black),
                               enabledBorder: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(30),
-                                borderSide:
-                                    const BorderSide(color: primaryLightColor),
+                                borderRadius: BorderRadius.circular(10),
+                                borderSide: const BorderSide(
+                                    color: primaryColor, width: 2),
                               ),
                               focusedBorder: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(30),
+                                borderRadius: BorderRadius.circular(10),
                                 borderSide: const BorderSide(
-                                    color: primaryLightColor, width: 2.0),
+                                    color: primaryColor, width: 2),
                               ),
                               errorBorder: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(30),
-                                borderSide:
-                                    const BorderSide(color: primaryLightColor),
+                                borderRadius: BorderRadius.circular(10),
+                                borderSide: const BorderSide(
+                                    color: primaryColor, width: 2),
                               ),
                               focusedErrorBorder: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(30),
+                                borderRadius: BorderRadius.circular(10),
                                 borderSide: const BorderSide(
-                                    color: primaryLightColor, width: 2.0),
+                                    color: primaryColor, width: 2),
                               ),
-                              fillColor: primaryLightColor,
+                              fillColor: white,
                               filled: true,
                             ),
                           ),
@@ -698,27 +699,30 @@ class CustomerState extends State<Customers> {
                             },
                             decoration: InputDecoration(
                               labelText: 'Customer Mobile Number',
+                              labelStyle: TextStyle(color: black),
                               enabledBorder: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(30),
-                                borderSide:
-                                    const BorderSide(color: primaryLightColor),
+                                borderRadius: BorderRadius.circular(10),
+                                borderSide: const BorderSide(
+                                    color: primaryColor, width: 2),
                               ),
                               focusedBorder: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(30),
+                                borderRadius: BorderRadius.circular(10),
                                 borderSide: const BorderSide(
-                                    color: primaryLightColor, width: 2.0),
+                                    color: primaryColor, width: 2),
                               ),
                               errorBorder: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(30),
-                                borderSide:
-                                    const BorderSide(color: primaryLightColor),
+                                borderRadius: BorderRadius.circular(10),
+                                borderSide: const BorderSide(
+                                    color: primaryColor, width: 2),
                               ),
                               focusedErrorBorder: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(30),
+                                borderRadius: BorderRadius.circular(10),
                                 borderSide: const BorderSide(
-                                    color: primaryLightColor, width: 2.0),
+                                  color: primaryColor,
+                                  width: 2,
+                                ),
                               ),
-                              fillColor: primaryLightColor,
+                              fillColor: white,
                               filled: true,
                             ),
                           ),
@@ -741,27 +745,28 @@ class CustomerState extends State<Customers> {
                       },
                       decoration: InputDecoration(
                         labelText: 'Customer Email',
+                        labelStyle: TextStyle(color: black),
                         enabledBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(30),
+                          borderRadius: BorderRadius.circular(10),
                           borderSide:
-                              const BorderSide(color: primaryLightColor),
+                              const BorderSide(color: primaryColor, width: 2),
                         ),
                         focusedBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(30),
-                          borderSide: const BorderSide(
-                              color: primaryLightColor, width: 2.0),
+                          borderRadius: BorderRadius.circular(10),
+                          borderSide:
+                              const BorderSide(color: primaryColor, width: 2),
                         ),
                         errorBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(30),
+                          borderRadius: BorderRadius.circular(10),
                           borderSide:
-                              const BorderSide(color: primaryLightColor),
+                              const BorderSide(color: primaryColor, width: 2),
                         ),
                         focusedErrorBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(30),
-                          borderSide: const BorderSide(
-                              color: primaryLightColor, width: 2.0),
+                          borderRadius: BorderRadius.circular(10),
+                          borderSide:
+                              const BorderSide(color: primaryColor, width: 2),
                         ),
-                        fillColor: primaryLightColor,
+                        fillColor: white,
                         filled: true,
                       ),
                     ),
@@ -787,7 +792,7 @@ class CustomerState extends State<Customers> {
                                 side: const BorderSide(
                                     color: primaryColor, width: 2),
                                 shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(30))),
+                                    borderRadius: BorderRadius.circular(10))),
                             child: const Text('Cancel',
                                 style: TextStyle(
                                     color: primaryColor,
@@ -825,7 +830,7 @@ class CustomerState extends State<Customers> {
                                 side: const BorderSide(
                                     color: primaryColor, width: 2),
                                 shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(30))),
+                                    borderRadius: BorderRadius.circular(10))),
                             child: const Text('Add',
                                 style: TextStyle(
                                     color: Colors.white,
@@ -963,27 +968,30 @@ class showCustomerInfo extends DataTableSource {
                       },
                       decoration: InputDecoration(
                         labelText: 'Customer Name',
+                        labelStyle: TextStyle(color: black),
                         enabledBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(30),
+                          borderRadius: BorderRadius.circular(10),
                           borderSide:
-                              const BorderSide(color: primaryLightColor),
+                              const BorderSide(color: primaryColor, width: 2),
                         ),
                         focusedBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(30),
+                          borderRadius: BorderRadius.circular(10),
                           borderSide: const BorderSide(
-                              color: primaryLightColor, width: 2.0),
+                            color: primaryColor,
+                            width: 2,
+                          ),
                         ),
                         errorBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(30),
+                          borderRadius: BorderRadius.circular(10),
                           borderSide:
-                              const BorderSide(color: primaryLightColor),
+                              const BorderSide(color: primaryColor, width: 2),
                         ),
                         focusedErrorBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(30),
-                          borderSide: const BorderSide(
-                              color: primaryLightColor, width: 2.0),
+                          borderRadius: BorderRadius.circular(10),
+                          borderSide:
+                              const BorderSide(color: primaryColor, width: 2),
                         ),
-                        fillColor: primaryLightColor,
+                        fillColor: white,
                         filled: true,
                       ),
                     ),
@@ -998,27 +1006,28 @@ class showCustomerInfo extends DataTableSource {
                       },
                       decoration: InputDecoration(
                         labelText: 'Customer Display Name',
+                        labelStyle: TextStyle(color: black),
                         enabledBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(30),
+                          borderRadius: BorderRadius.circular(10),
                           borderSide:
-                              const BorderSide(color: primaryLightColor),
+                              const BorderSide(color: primaryColor, width: 2),
                         ),
                         focusedBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(30),
-                          borderSide: const BorderSide(
-                              color: primaryLightColor, width: 2.0),
+                          borderRadius: BorderRadius.circular(10),
+                          borderSide:
+                              const BorderSide(color: primaryColor, width: 2),
                         ),
                         errorBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(30),
+                          borderRadius: BorderRadius.circular(10),
                           borderSide:
-                              const BorderSide(color: primaryLightColor),
+                              const BorderSide(color: primaryColor, width: 2),
                         ),
                         focusedErrorBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(30),
-                          borderSide: const BorderSide(
-                              color: primaryLightColor, width: 2.0),
+                          borderRadius: BorderRadius.circular(10),
+                          borderSide:
+                              const BorderSide(color: primaryColor, width: 2),
                         ),
-                        fillColor: primaryLightColor,
+                        fillColor: white,
                         filled: true,
                       ),
                     ),
@@ -1033,32 +1042,33 @@ class showCustomerInfo extends DataTableSource {
                       },
                       decoration: InputDecoration(
                         labelText: 'Date of Birth',
+                        labelStyle: TextStyle(color: black),
                         suffixIcon: IconButton(
                             onPressed: () {
                               datetimepicker(context);
                             },
                             icon: const Icon(Icons.calendar_month_outlined)),
                         enabledBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(30),
+                          borderRadius: BorderRadius.circular(10),
                           borderSide:
-                              const BorderSide(color: primaryLightColor),
+                              const BorderSide(color: primaryColor, width: 2),
                         ),
                         focusedBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(30),
-                          borderSide: const BorderSide(
-                              color: primaryLightColor, width: 2.0),
+                          borderRadius: BorderRadius.circular(10),
+                          borderSide:
+                              const BorderSide(color: primaryColor, width: 2),
                         ),
                         errorBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(30),
+                          borderRadius: BorderRadius.circular(10),
                           borderSide:
-                              const BorderSide(color: primaryLightColor),
+                              const BorderSide(color: primaryColor, width: 2),
                         ),
                         focusedErrorBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(30),
-                          borderSide: const BorderSide(
-                              color: primaryLightColor, width: 2.0),
+                          borderRadius: BorderRadius.circular(10),
+                          borderSide:
+                              const BorderSide(color: primaryColor, width: 2),
                         ),
-                        fillColor: primaryLightColor,
+                        fillColor: white,
                         filled: true,
                       ),
                     ),
@@ -1083,27 +1093,28 @@ class showCustomerInfo extends DataTableSource {
                             },
                             decoration: InputDecoration(
                               labelText: 'Code',
+                              labelStyle: TextStyle(color: black),
                               enabledBorder: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(30),
-                                borderSide:
-                                    const BorderSide(color: primaryLightColor),
+                                borderRadius: BorderRadius.circular(10),
+                                borderSide: const BorderSide(
+                                    color: primaryColor, width: 2),
                               ),
                               focusedBorder: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(30),
+                                borderRadius: BorderRadius.circular(10),
                                 borderSide: const BorderSide(
-                                    color: primaryLightColor, width: 2.0),
+                                    color: primaryColor, width: 2),
                               ),
                               errorBorder: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(30),
-                                borderSide:
-                                    const BorderSide(color: primaryLightColor),
+                                borderRadius: BorderRadius.circular(10),
+                                borderSide: const BorderSide(
+                                    color: primaryColor, width: 2),
                               ),
                               focusedErrorBorder: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(30),
+                                borderRadius: BorderRadius.circular(10),
                                 borderSide: const BorderSide(
-                                    color: primaryLightColor, width: 2.0),
+                                    color: primaryColor, width: 2),
                               ),
-                              fillColor: primaryLightColor,
+                              fillColor: white,
                               filled: true,
                             ),
                           ),
@@ -1124,27 +1135,28 @@ class showCustomerInfo extends DataTableSource {
                             },
                             decoration: InputDecoration(
                               labelText: 'Customer Mobile Number',
+                              labelStyle: TextStyle(color: black),
                               enabledBorder: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(30),
-                                borderSide:
-                                    const BorderSide(color: primaryLightColor),
+                                borderRadius: BorderRadius.circular(10),
+                                borderSide: const BorderSide(
+                                    color: primaryColor, width: 2),
                               ),
                               focusedBorder: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(30),
+                                borderRadius: BorderRadius.circular(10),
                                 borderSide: const BorderSide(
-                                    color: primaryLightColor, width: 2.0),
+                                    color: primaryColor, width: 2),
                               ),
                               errorBorder: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(30),
-                                borderSide:
-                                    const BorderSide(color: primaryLightColor),
+                                borderRadius: BorderRadius.circular(10),
+                                borderSide: const BorderSide(
+                                    color: primaryColor, width: 2),
                               ),
                               focusedErrorBorder: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(30),
+                                borderRadius: BorderRadius.circular(10),
                                 borderSide: const BorderSide(
-                                    color: primaryLightColor, width: 2.0),
+                                    color: primaryColor, width: 2),
                               ),
-                              fillColor: primaryLightColor,
+                              fillColor: white,
                               filled: true,
                             ),
                           ),
@@ -1167,27 +1179,28 @@ class showCustomerInfo extends DataTableSource {
                       },
                       decoration: InputDecoration(
                         labelText: 'Customer Email',
+                        labelStyle: TextStyle(color: black),
                         enabledBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(30),
+                          borderRadius: BorderRadius.circular(10),
                           borderSide:
-                              const BorderSide(color: primaryLightColor),
+                              const BorderSide(color: primaryColor, width: 2),
                         ),
                         focusedBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(30),
-                          borderSide: const BorderSide(
-                              color: primaryLightColor, width: 2.0),
+                          borderRadius: BorderRadius.circular(10),
+                          borderSide:
+                              const BorderSide(color: primaryColor, width: 2),
                         ),
                         errorBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(30),
+                          borderRadius: BorderRadius.circular(10),
                           borderSide:
-                              const BorderSide(color: primaryLightColor),
+                              const BorderSide(color: primaryColor, width: 2),
                         ),
                         focusedErrorBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(30),
-                          borderSide: const BorderSide(
-                              color: primaryLightColor, width: 2.0),
+                          borderRadius: BorderRadius.circular(10),
+                          borderSide:
+                              const BorderSide(color: primaryColor, width: 2),
                         ),
-                        fillColor: primaryLightColor,
+                        fillColor: white,
                         filled: true,
                       ),
                     ),
@@ -1213,7 +1226,7 @@ class showCustomerInfo extends DataTableSource {
                                 side: const BorderSide(
                                     color: primaryColor, width: 2),
                                 shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(30))),
+                                    borderRadius: BorderRadius.circular(10))),
                             child: const Text('Clear',
                                 style: TextStyle(
                                     color: primaryColor,
@@ -1243,7 +1256,7 @@ class showCustomerInfo extends DataTableSource {
                               side: const BorderSide(
                                   color: primaryColor, width: 2),
                               shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(30))),
+                                  borderRadius: BorderRadius.circular(10))),
                           child: const Text('Update',
                               style: TextStyle(
                                   color: Colors.white,

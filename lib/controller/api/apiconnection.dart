@@ -22,6 +22,9 @@ class Api {
         'Authorization': 'Bearer $token',
       },
     );
+    print(response.body);
+    print(response.statusCode);
+    //print(response.body);
     if (response.statusCode == 200) {
       Map<String, dynamic> jsonData = json.decode(response.body);
       List<dynamic> dataList = jsonData['data'];
@@ -30,10 +33,11 @@ class Api {
                 id: json['_id'] ?? '',
                 CName: json['name'] ?? '',
                 Email: json['email'] ?? '',
-                CDName: json['display_name'] ,
+                CDName: json['display_name'],
                 CMobile: json['contact_number'] ?? '',
-               // DOB: DateFormat('dd-MM-yyyy')
-                   // .format(DateTime.parse(json['dob'])),
+                clabel: json['labels'] ?? '',
+                // DOB: DateFormat('dd-MM-yyyy')
+                // .format(DateTime.parse(json['dob'])),
               ))
           .toList();
     } else {
@@ -41,6 +45,39 @@ class Api {
       print(jsonData['message']);
       throw Exception('Failed to load products');
     }
+  }
+
+  Future<void> labellists() async {
+    var token = await getToken();
+    Uri url = Uri.parse('$dev/customer/label/list');
+    final response = await http.get(
+      url,
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+        'Authorization': 'Bearer $token',
+      },
+    );
+
+    // if (response.statusCode == 200) {
+    //   Map<String, dynamic> jsonData = json.decode(response.body);
+    //   List<dynamic> dataList = jsonData['data'];
+    //   return dataList
+    //       .map((json) => customer(
+    //             id: json['_id'] ?? '',
+    //             CName: json['name'] ?? '',
+    //             Email: json['email'] ?? '',
+    //             CDName: json['display_name'],
+    //             CMobile: json['contact_number'] ?? '',
+    //             clabel: json['labels'] ?? '',
+    //             // DOB: DateFormat('dd-MM-yyyy')
+    //             // .format(DateTime.parse(json['dob'])),
+    //           ))
+    //       .toList();
+    // } else {
+    //   Map<String, dynamic> jsonData = json.decode(response.body);
+    //   print(jsonData['message']);
+    //   throw Exception('Failed to load products');
+    // }
 
     //  String rawData = '''
     // {

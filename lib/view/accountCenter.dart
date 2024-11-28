@@ -1,5 +1,4 @@
 import 'package:account_center/constant.dart';
-import 'package:account_center/login.dart';
 import 'package:account_center/view/agent/agent.dart';
 import 'package:account_center/view/apps/apps.dart';
 import 'package:account_center/view/billing/billing.dart';
@@ -35,44 +34,24 @@ class _AccountcenterState extends State<Accountcenter> {
   Widget listofoptions(
       String option, int pageindex, IconData icons, VoidCallback tap) {
     bool isselect = selectpage == pageindex;
-    bool isHovered = false;
     return StatefulBuilder(builder: (context, setState) {
       return InkWell(
-        onHover: (hovering) {
-          setState(() {
-            isHovered = hovering;
-          });
-        },
-        hoverColor: primaryColor.withOpacity(0.1),
         onTap: tap,
         child: ListTile(
           leading: Icon(
             icons,
             size: 25,
-            color: isselect
-                ? primaryColor
-                : isHovered
-                    ? primaryColor.withOpacity(0.5)
-                    : Colors.black,
+            color: isselect ? primaryColor : Colors.black,
           ),
           title: Text(
             option,
             style: TextStyle(
-                color: isselect
-                    ? primaryColor
-                    : isHovered
-                        ? primaryColor.withOpacity(0.5)
-                        : Colors.black,
+                color: isselect ? primaryColor : Colors.black,
                 fontWeight: FontWeight.bold,
                 fontSize: 16),
           ),
           trailing: Icon(Icons.chevron_right,
-              size: 25,
-              color: isselect
-                  ? primaryColor
-                  : isHovered
-                      ? primaryColor.withOpacity(0.5)
-                      : Colors.black),
+              size: 25, color: isselect ? primaryColor : Colors.black),
         ),
       );
     });
@@ -84,12 +63,9 @@ class _AccountcenterState extends State<Accountcenter> {
       body: Container(
         decoration: const BoxDecoration(
           gradient: LinearGradient(
-            colors: [
-              primaryLightColor,
-              primaryColor,
-            ],
-           begin: Alignment.topCenter,
-            end: Alignment.bottomRight,
+            colors: [Color.fromARGB(255, 184, 188, 233), white],
+            begin: Alignment.centerRight,
+            end: Alignment.topRight,
           ),
         ),
         child: Row(
@@ -104,12 +80,21 @@ class _AccountcenterState extends State<Accountcenter> {
                       mainAxisAlignment: MainAxisAlignment.start,
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        const Text(
-                          'Masfob',
-                          style: TextStyle(
-                              color: Colors.black,
-                              fontWeight: FontWeight.bold,
-                              fontSize: 25),
+                        Row(
+                          children: [
+                            Image.asset(
+                              'logo.webp',
+                              height: 50,
+                              width: 50,
+                            ),
+                            const Text(
+                              'Masfob',
+                              style: TextStyle(
+                                  color: Colors.black,
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 25),
+                            ),
+                          ],
                         ),
                         const SizedBox(height: 10),
                         const Text(
@@ -132,7 +117,7 @@ class _AccountcenterState extends State<Accountcenter> {
                               ListTile(
                                 leading: const CircleAvatar(
                                   maxRadius: 20,
-                                  backgroundColor:primaryColor,
+                                  backgroundColor: primaryColor,
                                 ),
                                 title: const Text('Organization Name'),
                                 subtitle: const Text('Masfob'),
@@ -152,16 +137,28 @@ class _AccountcenterState extends State<Accountcenter> {
                                   children: [
                                     TextButton(
                                         onPressed: () {},
-                                        child: const Text('Masfob@gmailcom', style: TextStyle(color: primaryColor,fontWeight: FontWeight.bold,),)),
+                                        child: const Text(
+                                          'Masfob@gmailcom',
+                                          style: TextStyle(
+                                            color: primaryColor,
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                        )),
                                     TextButton(
                                         onPressed: () {
-                                          Navigator.push(
-                                              context,
-                                              MaterialPageRoute(
-                                                  builder: (context) =>
-                                                      const Login()));
+                                          // Navigator.push(
+                                          //     context,
+                                          //     MaterialPageRoute(
+                                          //         builder: (context) =>
+                                          //             const Login()));
                                         },
-                                        child: const Text('Logout' ,style: TextStyle(color:primaryColor,fontWeight: FontWeight.bold,),)),
+                                        child: const Text(
+                                          'Logout',
+                                          style: TextStyle(
+                                            color: primaryColor,
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                        )),
                                   ],
                                 ),
                               )
@@ -174,8 +171,8 @@ class _AccountcenterState extends State<Accountcenter> {
                           style: TextStyle(
                               color: Colors.black,
                               fontWeight: FontWeight.bold,
-                              fontSize: 16),
-                        ), 
+                              fontSize: 18),
+                        ),
                         const SizedBox(height: 10),
                         Container(
                           height: 150,
@@ -209,7 +206,7 @@ class _AccountcenterState extends State<Accountcenter> {
                           style: TextStyle(
                               color: Colors.black,
                               fontWeight: FontWeight.bold,
-                              fontSize: 16),
+                              fontSize: 18),
                         ),
                         const SizedBox(height: 8),
                         Container(
@@ -230,8 +227,7 @@ class _AccountcenterState extends State<Accountcenter> {
                                   selectpage = 4;
                                 });
                               }),
-                              listofoptions(
-                                  'Customers', 5, Icons.person_2_outlined, () {
+                              listofoptions('Customers', 5, Icons.person, () {
                                 setState(() {
                                   selectpage = 5;
                                 });
@@ -251,7 +247,7 @@ class _AccountcenterState extends State<Accountcenter> {
                           style: TextStyle(
                               color: Colors.black,
                               fontWeight: FontWeight.bold,
-                              fontSize: 16),
+                              fontSize: 18),
                         ),
                         const SizedBox(height: 8),
                         Container(
@@ -262,8 +258,8 @@ class _AccountcenterState extends State<Accountcenter> {
                           width: double.infinity,
                           child: Column(
                             children: [
-                              listofoptions(
-                                  'Payment Details', 7, Icons.credit_card, () {
+                              listofoptions('Payment Details', 7,
+                                  Icons.credit_card_rounded, () {
                                 setState(() {
                                   selectpage = 7;
                                 });
