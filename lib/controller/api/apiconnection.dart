@@ -2,7 +2,6 @@ import 'dart:convert';
 import 'package:account_center/constant.dart';
 import 'package:account_center/model/customer.dart';
 import 'package:http/http.dart' as http;
-import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class Api {
@@ -36,8 +35,7 @@ class Api {
                 CDName: json['display_name'],
                 CMobile: json['contact_number'] ?? '',
                 clabel: json['labels'] ?? '',
-                // DOB: DateFormat('dd-MM-yyyy')
-                // .format(DateTime.parse(json['dob'])),
+                DOB: json['dob'] ?? '',
               ))
           .toList();
     } else {

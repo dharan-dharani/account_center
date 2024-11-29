@@ -73,7 +73,7 @@ class CustomerController {
         firstDate: DateTime(1950),
         lastDate: DateTime.now());
     if (select != null) {
-      dob.text = DateFormat('dd-MM-yyyy').format(select);
+      dob.text = DateFormat('dd/MM/yyyy').format(select);
     }
   }
 
@@ -128,15 +128,15 @@ class CustomerController {
     return token;
   }
 
-  Future<void> addcustomers(String cname, String cdname, String DOB,
-      String Cmobile, String email, BuildContext context) async {
+  Future<void> addcustomers(String cname, String cdname, String email,
+      String Cmobile, String DOB, BuildContext context) async {
     var token = await getToken();
     try {
       Uri url = Uri.parse('$dev/customer/add');
       var data = {
         "name": cname,
-        "email": email,
         "display_name": cdname,
+        "email": email,
         "contact_number": Cmobile,
         "dob": DOB,
       };
@@ -150,8 +150,9 @@ class CustomerController {
         },
         body: body,
       );
-      print(response.statusCode);
-      print(response.body);
+
+      // print(response.body);
+      // print(response.statusCode);
       if (response.statusCode == 200) {
         ScaffoldMessenger.of(context)
             .showSnackBar(const SnackBar(content: Text('send Sucessfull')));
@@ -165,12 +166,19 @@ class CustomerController {
     }
   }
 
-  Future<void> update(
-      String cname, String cdname, String id, BuildContext context) async {
+  Future<void> update(String cname, String cdname, String email, String cmo,
+      String dob, String id, BuildContext context) async {
     var token = await getToken();
     try {
       Uri url = Uri.parse('$dev/customer/update');
-      var data = {"name": cname, "display_name": cdname, "id": id};
+      var data = {
+        "name": cname,
+        "display_name": cdname,
+        "email": email,
+        "contact_number": cmo,
+        "dob": dob,
+        "id": id
+      };
       String? body = json.encode(data);
 
       var response = await http.post(

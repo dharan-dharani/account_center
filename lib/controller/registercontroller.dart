@@ -5,19 +5,23 @@ import 'package:account_center/constant.dart';
 
 class Registercontroller {
   final registerformkey = GlobalKey<FormState>();
+  final TextEditingController organizationname = TextEditingController();
   final TextEditingController name = TextEditingController();
   final TextEditingController email = TextEditingController();
   final TextEditingController password = TextEditingController();
   final TextEditingController mobileno = TextEditingController();
-  Future<void> register(String name, String email, String mobileno,
+  Future<void> register(String organizationname,String name, String email,
+   String mobileno,
       String password, BuildContext context) async {
     try {
       Uri url = Uri.parse('$dev/user/register');
       var data = {
+        "Organization_name": organizationname,
         "name": name,
-        "contact_number": mobileno,
         "email": email,
+        "contact_number": mobileno,
         "password": password,
+        
       };
 
       String? body = json.encode(data);

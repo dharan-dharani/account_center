@@ -1,6 +1,5 @@
 import 'package:account_center/constant.dart';
 import 'package:account_center/controller/logincontroller.dart';
-import 'package:account_center/view/accountCenter.dart';
 import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:flutter/material.dart';
 
@@ -147,13 +146,13 @@ class FormPage extends State<Login> {
                       const SizedBox(height: 20),
                       OutlinedButton(
                           onPressed: () {
-                            // logincontroller.login(logincontroller.email.text,
-                            //     logincontroller.password.text, context);
+                            logincontroller.login(logincontroller.email.text,
+                                logincontroller.password.text, context);
 
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => Accountcenter()));
+                            // Navigator.push(
+                            //     context,
+                            //     MaterialPageRoute(
+                            //         builder: (context) => Accountcenter()));
                           },
                           style: OutlinedButton.styleFrom(
                               minimumSize: const Size(110, 50),

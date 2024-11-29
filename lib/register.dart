@@ -3,8 +3,8 @@ import 'package:account_center/controller/registercontroller.dart';
 import 'package:flutter/material.dart';
 
 class Register extends StatefulWidget {
-    final VoidCallback onSwitch;
-  const Register({super.key,required this.onSwitch});
+  final VoidCallback onSwitch;
+  const Register({super.key, required this.onSwitch});
   @override
   Signup createState() => Signup();
 }
@@ -13,7 +13,6 @@ Registercontroller registercontroller = Registercontroller();
 
 class Signup extends State<Register> {
   @override
-
   @override
   Widget build(BuildContext context) {
     return Row(
@@ -34,7 +33,7 @@ class Signup extends State<Register> {
                 ],
                 borderRadius: BorderRadius.circular(15),
               ),
-              height: 450,
+              height: 550,
               width: 500,
               child: Form(
                 key: registercontroller.registerformkey,
@@ -51,10 +50,10 @@ class Signup extends State<Register> {
                       ),
                       const SizedBox(height: 20),
                       TextFormField(
-                        controller: registercontroller.name,
+                        controller: registercontroller.organizationname,
                         validator: (value) {
                           if (value == null || value.isEmpty) {
-                            return "Please Enter your Name";
+                            return "Please Enter your Organization Name";
                           }
                           return null;
                         },
@@ -62,7 +61,7 @@ class Signup extends State<Register> {
                           fillColor: white,
                           filled: true,
                           label: const Text(
-                            'UserName',
+                            'Organization Name',
                             style: TextStyle(
                               color: Colors.black,
                               fontWeight: FontWeight.bold,
@@ -79,7 +78,8 @@ class Signup extends State<Register> {
                           ),
                           focusedBorder: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(10),
-                            borderSide: const BorderSide(color: black, width: 2.0),
+                            borderSide:
+                                const BorderSide(color: black, width: 2.0),
                           ),
                           errorBorder: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(10),
@@ -87,7 +87,52 @@ class Signup extends State<Register> {
                           ),
                           focusedErrorBorder: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(10),
-                            borderSide: const BorderSide(color: black, width: 2.0),
+                            borderSide:
+                                const BorderSide(color: black, width: 2.0),
+                          ),
+                        ),
+                      ),
+                      const SizedBox(height: 20),
+                      TextFormField(
+                        controller: registercontroller.name,
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return "Please Enter your User Name";
+                          }
+                          return null;
+                        },
+                        decoration: InputDecoration(
+                          fillColor: white,
+                          filled: true,
+                          label: const Text(
+                            'User Name',
+                            style: TextStyle(
+                              color: Colors.black,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          prefixIcon: const Icon(
+                            Icons.person,
+                            color: primaryColor,
+                          ),
+                          floatingLabelBehavior: FloatingLabelBehavior.auto,
+                          enabledBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(10),
+                            borderSide: const BorderSide(color: black),
+                          ),
+                          focusedBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(10),
+                            borderSide:
+                                const BorderSide(color: black, width: 2.0),
+                          ),
+                          errorBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(10),
+                            borderSide: const BorderSide(color: black),
+                          ),
+                          focusedErrorBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(10),
+                            borderSide:
+                                const BorderSide(color: black, width: 2.0),
                           ),
                         ),
                       ),
@@ -110,7 +155,8 @@ class Signup extends State<Register> {
                               fontWeight: FontWeight.bold,
                             ),
                           ),
-                          prefixIcon: const Icon(Icons.phone, color: primaryColor),
+                          prefixIcon:
+                              const Icon(Icons.phone, color: primaryColor),
                           floatingLabelBehavior: FloatingLabelBehavior.auto,
                           enabledBorder: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(10),
@@ -118,7 +164,8 @@ class Signup extends State<Register> {
                           ),
                           focusedBorder: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(10),
-                            borderSide: const BorderSide(color: black, width: 2.0),
+                            borderSide:
+                                const BorderSide(color: black, width: 2.0),
                           ),
                           errorBorder: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(10),
@@ -126,7 +173,8 @@ class Signup extends State<Register> {
                           ),
                           focusedErrorBorder: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(10),
-                            borderSide: const BorderSide(color: black, width: 2.0),
+                            borderSide:
+                                const BorderSide(color: black, width: 2.0),
                           ),
                         ),
                       ),
@@ -149,7 +197,8 @@ class Signup extends State<Register> {
                               fontWeight: FontWeight.bold,
                             ),
                           ),
-                          prefixIcon: const Icon(Icons.email, color: primaryColor),
+                          prefixIcon:
+                              const Icon(Icons.email, color: primaryColor),
                           floatingLabelBehavior: FloatingLabelBehavior.auto,
                           enabledBorder: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(10),
@@ -157,7 +206,8 @@ class Signup extends State<Register> {
                           ),
                           focusedBorder: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(10),
-                            borderSide: const BorderSide(color: black, width: 2.0),
+                            borderSide:
+                                const BorderSide(color: black, width: 2.0),
                           ),
                           errorBorder: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(10),
@@ -165,7 +215,8 @@ class Signup extends State<Register> {
                           ),
                           focusedErrorBorder: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(10),
-                            borderSide: const BorderSide(color: black, width: 2.0),
+                            borderSide:
+                                const BorderSide(color: black, width: 2.0),
                           ),
                         ),
                       ),
@@ -197,7 +248,8 @@ class Signup extends State<Register> {
                           ),
                           focusedBorder: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(10),
-                            borderSide: const BorderSide(color: black, width: 2.0),
+                            borderSide:
+                                const BorderSide(color: black, width: 2.0),
                           ),
                           errorBorder: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(10),
@@ -205,7 +257,8 @@ class Signup extends State<Register> {
                           ),
                           focusedErrorBorder: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(10),
-                            borderSide: const BorderSide(color: black, width: 2.0),
+                            borderSide:
+                                const BorderSide(color: black, width: 2.0),
                           ),
                         ),
                         //obscureText: true,
@@ -214,6 +267,7 @@ class Signup extends State<Register> {
                       OutlinedButton(
                           onPressed: () {
                             registercontroller.register(
+                                registercontroller.organizationname.text,
                                 registercontroller.name.text,
                                 registercontroller.email.text,
                                 registercontroller.mobileno.text,
@@ -223,7 +277,8 @@ class Signup extends State<Register> {
                           style: OutlinedButton.styleFrom(
                               minimumSize: const Size(110, 50),
                               backgroundColor: primaryColor,
-                              side: const BorderSide(color: primaryColor, width: 2),
+                              side: const BorderSide(
+                                  color: primaryColor, width: 2),
                               shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(10))),
                           child: const Text('Register',

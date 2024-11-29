@@ -3,7 +3,6 @@ import 'package:account_center/controller/api/apiconnection.dart';
 import 'package:account_center/controller/customercontroller.dart';
 import 'package:account_center/model/customer.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
 
 class Customers extends StatefulWidget {
@@ -642,92 +641,45 @@ class CustomerState extends State<Customers> {
                       ),
                     ),
                     const SizedBox(height: 10),
-                    Row(
-                      children: [
-                        Container(
-                          width: 80,
-                          child: TextFormField(
-                            controller: customerController.code,
-                            validator: (value) {
-                              if (value == null || value.isEmpty) {
-                                return 'Please Enter Your Country Code';
-                              }
-
-                              return null;
-                            },
-                            decoration: InputDecoration(
-                              labelText: 'Code',
-                              labelStyle: TextStyle(color: black),
-                              enabledBorder: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(10),
-                                borderSide: const BorderSide(
-                                    color: primaryColor, width: 2),
-                              ),
-                              focusedBorder: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(10),
-                                borderSide: const BorderSide(
-                                    color: primaryColor, width: 2),
-                              ),
-                              errorBorder: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(10),
-                                borderSide: const BorderSide(
-                                    color: primaryColor, width: 2),
-                              ),
-                              focusedErrorBorder: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(10),
-                                borderSide: const BorderSide(
-                                    color: primaryColor, width: 2),
-                              ),
-                              fillColor: white,
-                              filled: true,
-                            ),
+                    TextFormField(
+                      controller: customerController.cmobileno,
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Please Enter Your Mobile Number';
+                        }
+                        if (!RegExp(r'^[6-9]\d{9}$').hasMatch(value)) {
+                          return 'Please enter a valid 10-digit mobile number.';
+                        }
+                        return null;
+                      },
+                      decoration: InputDecoration(
+                        labelText: 'Customer Mobile Number',
+                        labelStyle: TextStyle(color: black),
+                        enabledBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(10),
+                          borderSide: const BorderSide(
+                              color: primaryColor, width: 2),
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(10),
+                          borderSide: const BorderSide(
+                              color: primaryColor, width: 2),
+                        ),
+                        errorBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(10),
+                          borderSide: const BorderSide(
+                              color: primaryColor, width: 2),
+                        ),
+                        focusedErrorBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(10),
+                          borderSide: const BorderSide(
+                            color: primaryColor,
+                            width: 2,
                           ),
                         ),
-                        const SizedBox(width: 20),
-                        Container(
-                          width: 300,
-                          child: TextFormField(
-                            controller: customerController.cmobileno,
-                            validator: (value) {
-                              if (value == null || value.isEmpty) {
-                                return 'Please Enter Your Mobile Number';
-                              }
-                              if (!RegExp(r'^[6-9]\d{9}$').hasMatch(value)) {
-                                return 'Please enter a valid 10-digit mobile number.';
-                              }
-                              return null;
-                            },
-                            decoration: InputDecoration(
-                              labelText: 'Customer Mobile Number',
-                              labelStyle: TextStyle(color: black),
-                              enabledBorder: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(10),
-                                borderSide: const BorderSide(
-                                    color: primaryColor, width: 2),
-                              ),
-                              focusedBorder: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(10),
-                                borderSide: const BorderSide(
-                                    color: primaryColor, width: 2),
-                              ),
-                              errorBorder: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(10),
-                                borderSide: const BorderSide(
-                                    color: primaryColor, width: 2),
-                              ),
-                              focusedErrorBorder: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(10),
-                                borderSide: const BorderSide(
-                                  color: primaryColor,
-                                  width: 2,
-                                ),
-                              ),
-                              fillColor: white,
-                              filled: true,
-                            ),
-                          ),
-                        ),
-                      ],
+                        fillColor: white,
+                        filled: true,
+                      ),
                     ),
                     const SizedBox(height: 10),
                     TextFormField(
@@ -781,7 +733,7 @@ class CustomerState extends State<Customers> {
                                 customerController.cname.clear();
                                 customerController.cdname.clear();
                                 customerController.dob.clear();
-                                customerController.code.clear();
+                             
                                 customerController.cmobileno.clear();
                                 customerController.email.clear();
                               });
@@ -807,9 +759,11 @@ class CustomerState extends State<Customers> {
                                     .addcustomers(
                                         customerController.cname.text,
                                         customerController.cdname.text,
-                                        customerController.dob.text,
-                                        customerController.cmobileno.text,
                                         customerController.email.text,
+                                         customerController.cmobileno.text,
+                                        customerController.dob.text,
+                                       
+                                        
                                         context)
                                     .then((_) {
                                   setState(() {});
@@ -817,7 +771,7 @@ class CustomerState extends State<Customers> {
                                 customerController.cname.clear();
                                 customerController.cdname.clear();
                                 customerController.dob.clear();
-                                customerController.code.clear();
+                               
                                 customerController.cmobileno.clear();
                                 customerController.email.clear();
 
@@ -925,8 +879,7 @@ class showCustomerInfo extends DataTableSource {
         text: customerController.customerdata[index].CDName);
     final TextEditingController updatedob =
         TextEditingController(text: customerController.customerdata[index].DOB);
-    final TextEditingController updatecode = TextEditingController(
-        text: customerController.customerdata[index].Code);
+  
     final TextEditingController updatecmo = TextEditingController(
         text: customerController.customerdata[index].CMobile);
     final TextEditingController updateemail = TextEditingController(
@@ -1073,96 +1026,45 @@ class showCustomerInfo extends DataTableSource {
                       ),
                     ),
                     const SizedBox(height: 10),
-                    Row(
-                      children: [
-                        Container(
-                          width: 80,
-                          child: TextFormField(
-                            inputFormatters: <TextInputFormatter>[
-                              FilteringTextInputFormatter.digitsOnly,
-                            ],
-                            controller: updatecode,
-                            validator: (value) {
-                              if (value == null || value.isEmpty) {
-                                return 'Please Enter Your Country Code';
-                              }
-                              if (int.tryParse(value) == null) {
-                                return 'Please enter a valid integer.';
-                              }
-                              return null;
-                            },
-                            decoration: InputDecoration(
-                              labelText: 'Code',
-                              labelStyle: TextStyle(color: black),
-                              enabledBorder: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(10),
-                                borderSide: const BorderSide(
-                                    color: primaryColor, width: 2),
-                              ),
-                              focusedBorder: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(10),
-                                borderSide: const BorderSide(
-                                    color: primaryColor, width: 2),
-                              ),
-                              errorBorder: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(10),
-                                borderSide: const BorderSide(
-                                    color: primaryColor, width: 2),
-                              ),
-                              focusedErrorBorder: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(10),
-                                borderSide: const BorderSide(
-                                    color: primaryColor, width: 2),
-                              ),
-                              fillColor: white,
-                              filled: true,
-                            ),
+                   TextFormField(
+                        controller: updatecmo,
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return 'Please Enter Your Mobile Number';
+                          }
+                          if (!RegExp(r'^[6-9]\d{9}$').hasMatch(value)) {
+                            return 'Please enter a valid 10-digit mobile number.';
+                          }
+                          return null;
+                        },
+                        decoration: InputDecoration(
+                          labelText: 'Customer Mobile Number',
+                          labelStyle: TextStyle(color: black),
+                          enabledBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(10),
+                            borderSide: const BorderSide(
+                                color: primaryColor, width: 2),
                           ),
-                        ),
-                        const SizedBox(width: 20),
-                        Container(
-                          width: 300,
-                          child: TextFormField(
-                            controller: updatecmo,
-                            validator: (value) {
-                              if (value == null || value.isEmpty) {
-                                return 'Please Enter Your Mobile Number';
-                              }
-                              if (!RegExp(r'^[6-9]\d{9}$').hasMatch(value)) {
-                                return 'Please enter a valid 10-digit mobile number.';
-                              }
-                              return null;
-                            },
-                            decoration: InputDecoration(
-                              labelText: 'Customer Mobile Number',
-                              labelStyle: TextStyle(color: black),
-                              enabledBorder: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(10),
-                                borderSide: const BorderSide(
-                                    color: primaryColor, width: 2),
-                              ),
-                              focusedBorder: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(10),
-                                borderSide: const BorderSide(
-                                    color: primaryColor, width: 2),
-                              ),
-                              errorBorder: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(10),
-                                borderSide: const BorderSide(
-                                    color: primaryColor, width: 2),
-                              ),
-                              focusedErrorBorder: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(10),
-                                borderSide: const BorderSide(
-                                    color: primaryColor, width: 2),
-                              ),
-                              fillColor: white,
-                              filled: true,
-                            ),
+                          focusedBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(10),
+                            borderSide: const BorderSide(
+                                color: primaryColor, width: 2),
                           ),
+                          errorBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(10),
+                            borderSide: const BorderSide(
+                                color: primaryColor, width: 2),
+                          ),
+                          focusedErrorBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(10),
+                            borderSide: const BorderSide(
+                                color: primaryColor, width: 2),
+                          ),
+                          fillColor: white,
+                          filled: true,
                         ),
-                      ],
-                    ),
+                      ),
+                    
                     const SizedBox(height: 10),
                     TextFormField(
                       controller: updateemail,
@@ -1215,7 +1117,7 @@ class showCustomerInfo extends DataTableSource {
                                 updatecname.clear();
                                 updatecdname.clear();
                                 updatedob.clear();
-                                updatecode.clear();
+                            
                                 updatecmo.clear();
                                 updateemail.clear();
                               }
@@ -1241,6 +1143,12 @@ class showCustomerInfo extends DataTableSource {
                                   .update(
                                       updatecname.text,
                                       updatecdname.text,
+                                      updateemail.text,
+                                      updatecmo.text,
+                                      updatedob.text,
+                                      
+                                      
+                                     
                                       customerController.customerdata[index].id,
                                       context)
                                   .then((_) {
