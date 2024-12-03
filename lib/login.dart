@@ -45,7 +45,7 @@ class FormPage extends State<Login> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
-                      SizedBox(height: 10),
+                    const SizedBox(height: 10),
                       DefaultTextStyle(
                           style: const TextStyle(
                               color: Colors.black,
@@ -148,11 +148,6 @@ class FormPage extends State<Login> {
                           onPressed: () {
                             logincontroller.login(logincontroller.email.text,
                                 logincontroller.password.text, context);
-
-                            // Navigator.push(
-                            //     context,
-                            //     MaterialPageRoute(
-                            //         builder: (context) => Accountcenter()));
                           },
                           style: OutlinedButton.styleFrom(
                               minimumSize: const Size(110, 50),
@@ -181,13 +176,14 @@ class FormPage extends State<Login> {
                           Hero(
                             tag: 'dash',
                             child: TextButton(
+                              onPressed: widget.onSwitch,
                               child: const Text(
                                 'Register',
                                 style: TextStyle(
                                     color: Colors.red,
                                     fontWeight: FontWeight.bold),
                               ),
-                              onPressed: widget.onSwitch,
+                              
                             ),
                           )
                         ],

@@ -1,6 +1,7 @@
 import 'package:account_center/constant.dart';
 import 'package:account_center/controller/api/apiconnection.dart';
 import 'package:account_center/controller/customercontroller.dart';
+import 'package:account_center/controller/listcontroller.dart';
 import 'package:account_center/model/customer.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -13,15 +14,21 @@ class Customers extends StatefulWidget {
 }
 
 CustomerController customerController = CustomerController();
+Listcontroller listcontroller = Listcontroller();
 Api api = Api();
 
 class CustomerState extends State<Customers> {
   @override
   void initState() {
     super.initState();
-    api.labellists();
     customerController.filteredData = customerController.customerdata;
+    listcontroller.filteredlabellist = listcontroller.chipslist;
     customerController.fetchlist().then((_) {
+      setState(() {
+        // print('set state');
+      });
+    });
+    listcontroller.fetchlabellist().then((_) {
       setState(() {
         // print('set state');
       });
@@ -37,46 +44,75 @@ class CustomerState extends State<Customers> {
     chips() {
       return showDialog(
           context: context,
-          builder: (BuildContext context) => SimpleDialog(
-                title: const Text('Select List'),
-                children: [
-                  FilterChip(
-                      label: const Text('Instagram'),
-                      onSelected: (bool value) {
-                        setState(() {
-                          customerController.chipselect = value;
-                        });
-                      }),
-                  FilterChip(
-                      label: const Text('Facebook'),
-                      onSelected: (bool value) {
-                        setState(() {
-                          customerController.chipselect = value;
-                        });
-                      }),
-                  FilterChip(
-                      label: const Text('X'),
-                      onSelected: (bool value) {
-                        setState(() {
-                          customerController.chipselect = value;
-                        });
-                      }),
-                  FilterChip(
-                      label: const Text('LinkedIn'),
-                      onSelected: (bool value) {
-                        setState(() {
-                          customerController.chipselect = value;
-                        });
-                      }),
-                  FilterChip(
-                      label: const Text('Whats App'),
-                      onSelected: (bool value) {
-                        setState(() {
-                          customerController.chipselect = value;
-                        });
-                      }),
-                ],
-              ));
+          builder: (BuildContext context) =>
+              StatefulBuilder(builder: (context, setState) {
+                return AlertDialog(
+                  title: const Text('Select List'),
+                  content: Padding(
+                    padding: const EdgeInsets.all(12.0),
+                    child: Wrap(
+                      spacing: 8.0,
+                      runSpacing: 8.0,
+                      children: listcontroller.chipslist.map((chip) {
+                        return FilterChip(
+                          label: Text(chip.chipname),
+                          selected: chip.chipselect,
+                          onSelected: (bool value) {
+                            setState(() {
+                              chip.chipselect = value;
+                              if (chip.chipselect) {
+                                listcontroller.addassignlist(chip.chipname);
+                              } else {
+                                listcontroller.removeassignlist(chip.chipname);
+                              }
+                            });
+                          },
+                        );
+                      }).toList(),
+                    ),
+                  ),
+                  actions: [
+                    Row(
+                      children: [
+                        OutlinedButton(
+                            onPressed: () {},
+                            style: OutlinedButton.styleFrom(
+                                minimumSize: const Size(110, 50),
+                                side: const BorderSide(
+                                    color: primaryColor, width: 2),
+                                shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(10))),
+                            child: const Text('Cancel',
+                                style: TextStyle(
+                                    color: primaryColor,
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 14))),
+                        const SizedBox(width: 10),
+                        OutlinedButton(
+                            onPressed: () {
+                              listcontroller.assignlistlabel(context).then((_) {
+                                setState(() {});
+                              });
+
+                              Navigator.pop(context);
+                            },
+                            style: OutlinedButton.styleFrom(
+                                minimumSize: const Size(110, 50),
+                                backgroundColor: primaryColor,
+                                side: const BorderSide(
+                                    color: primaryColor, width: 2),
+                                shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(10))),
+                            child: const Text('Assign',
+                                style: TextStyle(
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 14))),
+                      ],
+                    )
+                  ],
+                );
+              }));
     }
 
     return Row(
@@ -326,8 +362,7 @@ class CustomerState extends State<Customers> {
                                             // crossAxisAlignment: CrossAxisAlignment.start,
                                             children: [
                                               TextFormField(
-                                                controller:
-                                                    customerController.list,
+                                                controller: listcontroller.list,
                                                 decoration: InputDecoration(
                                                   fillColor: white,
                                                   filled: true,
@@ -389,6 +424,15 @@ class CustomerState extends State<Customers> {
                                                   const SizedBox(width: 10),
                                                   OutlinedButton(
                                                       onPressed: () {
+                                                        listcontroller
+                                                            .addlistlabel(
+                                                                listcontroller
+                                                                    .list.text,
+                                                                context)
+                                                            .then((_) {
+                                                          setState(() {});
+                                                        });
+
                                                         Navigator.pop(context);
                                                       },
                                                       style: OutlinedButton.styleFrom(
@@ -464,7 +508,7 @@ class CustomerState extends State<Customers> {
                     ),
                     Expanded(
                       child: ListView.builder(
-                          itemCount: customerController.customerdata.length,
+                          itemCount: listcontroller.chipslist.length,
                           itemBuilder: (context, index) {
                             return Padding(
                               padding: const EdgeInsets.all(8.0),
@@ -486,14 +530,24 @@ class CustomerState extends State<Customers> {
                                     backgroundColor: primaryColor,
                                     maxRadius: 20,
                                   ),
-                                  // title: Text(list?[index]),
+                                  title: Text(
+                                      listcontroller.chipslist[index].chipname),
                                   subtitle: const Text(
                                     '(0) Contacts',
                                     style: TextStyle(
                                         color: Colors.grey, fontSize: 12),
                                   ),
                                   trailing: InkWell(
-                                    onTap: () {},
+                                    onTap: () {
+                                      listcontroller
+                                          .deleteListlabel(
+                                              listcontroller
+                                                  .chipslist[index].chipname,
+                                              context)
+                                          .then((_) {
+                                        setState(() {});
+                                      });
+                                    },
                                     child: const Icon(
                                         Icons.delete_outline_outlined),
                                   ),
@@ -657,18 +711,18 @@ class CustomerState extends State<Customers> {
                         labelStyle: TextStyle(color: black),
                         enabledBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(10),
-                          borderSide: const BorderSide(
-                              color: primaryColor, width: 2),
+                          borderSide:
+                              const BorderSide(color: primaryColor, width: 2),
                         ),
                         focusedBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(10),
-                          borderSide: const BorderSide(
-                              color: primaryColor, width: 2),
+                          borderSide:
+                              const BorderSide(color: primaryColor, width: 2),
                         ),
                         errorBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(10),
-                          borderSide: const BorderSide(
-                              color: primaryColor, width: 2),
+                          borderSide:
+                              const BorderSide(color: primaryColor, width: 2),
                         ),
                         focusedErrorBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(10),
@@ -733,7 +787,7 @@ class CustomerState extends State<Customers> {
                                 customerController.cname.clear();
                                 customerController.cdname.clear();
                                 customerController.dob.clear();
-                             
+
                                 customerController.cmobileno.clear();
                                 customerController.email.clear();
                               });
@@ -760,10 +814,8 @@ class CustomerState extends State<Customers> {
                                         customerController.cname.text,
                                         customerController.cdname.text,
                                         customerController.email.text,
-                                         customerController.cmobileno.text,
+                                        customerController.cmobileno.text,
                                         customerController.dob.text,
-                                       
-                                        
                                         context)
                                     .then((_) {
                                   setState(() {});
@@ -771,7 +823,7 @@ class CustomerState extends State<Customers> {
                                 customerController.cname.clear();
                                 customerController.cdname.clear();
                                 customerController.dob.clear();
-                               
+
                                 customerController.cmobileno.clear();
                                 customerController.email.clear();
 
@@ -824,17 +876,19 @@ class showCustomerInfo extends DataTableSource {
             Text(row.DOB.toString()),
           ],
         )),
-        DataCell(
-          ListTile(
-            title: Text(row.Email.toString()),
-            subtitle: Row(
+        DataCell(Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(row.Email.toString()),
+            Text(row.CMobile.toString()),
+            Row(
               children: [
-                Text(row.Code.toString()),
-                Text(row.CMobile.toString()),
+                Text(row.clabel.toString()),
               ],
             ),
-          ),
-        ),
+          ],
+        )),
         DataCell(Row(
           children: [
             IconButton(
@@ -879,7 +933,7 @@ class showCustomerInfo extends DataTableSource {
         text: customerController.customerdata[index].CDName);
     final TextEditingController updatedob =
         TextEditingController(text: customerController.customerdata[index].DOB);
-  
+
     final TextEditingController updatecmo = TextEditingController(
         text: customerController.customerdata[index].CMobile);
     final TextEditingController updateemail = TextEditingController(
@@ -1026,45 +1080,44 @@ class showCustomerInfo extends DataTableSource {
                       ),
                     ),
                     const SizedBox(height: 10),
-                   TextFormField(
-                        controller: updatecmo,
-                        validator: (value) {
-                          if (value == null || value.isEmpty) {
-                            return 'Please Enter Your Mobile Number';
-                          }
-                          if (!RegExp(r'^[6-9]\d{9}$').hasMatch(value)) {
-                            return 'Please enter a valid 10-digit mobile number.';
-                          }
-                          return null;
-                        },
-                        decoration: InputDecoration(
-                          labelText: 'Customer Mobile Number',
-                          labelStyle: TextStyle(color: black),
-                          enabledBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(10),
-                            borderSide: const BorderSide(
-                                color: primaryColor, width: 2),
-                          ),
-                          focusedBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(10),
-                            borderSide: const BorderSide(
-                                color: primaryColor, width: 2),
-                          ),
-                          errorBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(10),
-                            borderSide: const BorderSide(
-                                color: primaryColor, width: 2),
-                          ),
-                          focusedErrorBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(10),
-                            borderSide: const BorderSide(
-                                color: primaryColor, width: 2),
-                          ),
-                          fillColor: white,
-                          filled: true,
+                    TextFormField(
+                      controller: updatecmo,
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Please Enter Your Mobile Number';
+                        }
+                        if (!RegExp(r'^[6-9]\d{9}$').hasMatch(value)) {
+                          return 'Please enter a valid 10-digit mobile number.';
+                        }
+                        return null;
+                      },
+                      decoration: InputDecoration(
+                        labelText: 'Customer Mobile Number',
+                        labelStyle: TextStyle(color: black),
+                        enabledBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(10),
+                          borderSide:
+                              const BorderSide(color: primaryColor, width: 2),
                         ),
+                        focusedBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(10),
+                          borderSide:
+                              const BorderSide(color: primaryColor, width: 2),
+                        ),
+                        errorBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(10),
+                          borderSide:
+                              const BorderSide(color: primaryColor, width: 2),
+                        ),
+                        focusedErrorBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(10),
+                          borderSide:
+                              const BorderSide(color: primaryColor, width: 2),
+                        ),
+                        fillColor: white,
+                        filled: true,
                       ),
-                    
+                    ),
                     const SizedBox(height: 10),
                     TextFormField(
                       controller: updateemail,
@@ -1117,7 +1170,7 @@ class showCustomerInfo extends DataTableSource {
                                 updatecname.clear();
                                 updatecdname.clear();
                                 updatedob.clear();
-                            
+
                                 updatecmo.clear();
                                 updateemail.clear();
                               }
@@ -1146,9 +1199,6 @@ class showCustomerInfo extends DataTableSource {
                                       updateemail.text,
                                       updatecmo.text,
                                       updatedob.text,
-                                      
-                                      
-                                     
                                       customerController.customerdata[index].id,
                                       context)
                                   .then((_) {

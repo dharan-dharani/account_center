@@ -24,7 +24,7 @@ class Registercontroller {
         
       };
 
-      String? body = json.encode(data);
+      String? body = json.encode(data); 
       var response = await http.post(
         url,
         headers: <String, String>{
@@ -33,7 +33,7 @@ class Registercontroller {
         },
         body: body,
       );
-      print(body);
+       //print(body);
 
       if (response.statusCode == 200) {
         ScaffoldMessenger.of(context)
