@@ -7,7 +7,6 @@ import 'package:account_center/constant.dart';
 import 'package:account_center/controller/api/apiconnection.dart';
 import 'package:account_center/view/customers/customers.dart';
 import 'package:flutter/material.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class Listcontroller {
   final TextEditingController list = TextEditingController();
