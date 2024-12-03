@@ -1,4 +1,6 @@
 import 'dart:convert';
+
+import 'package:archive/archive.dart';
 import 'package:http/http.dart' as http;
 import 'package:account_center/constant.dart';
 import 'package:account_center/controller/api/apiconnection.dart';
@@ -15,16 +17,12 @@ class CustomerController {
   final TextEditingController code = TextEditingController();
   final TextEditingController cmobileno = TextEditingController();
   final TextEditingController email = TextEditingController();
-  final TextEditingController list = TextEditingController();
   final TextEditingController search = TextEditingController();
   final forms = GlobalKey<FormState>();
-  List addlist = [];
   List<customer> filteredData = [];
   List<customer> customerdata = [];
   bool isSelectAll = false;
-  bool chipselect = false;
   final List<String> listOfCustomer = [];
-  //final List<String> selectedItems = [];
 
   void filterData(String query, Function() refreshParent) {
     if (query.isEmpty) {
@@ -39,6 +37,13 @@ class CustomerController {
     refreshParent();
   }
 
+  void clearcustomer(bool selected) {
+    listOfCustomer.clear();
+    for (var singlecheck in customerdata) {
+      singlecheck.isclick = selected;
+    }
+  }
+
   checkaddall(bool selected) {
     listOfCustomer.clear();
     for (var singlecheck in customerdata) {
@@ -49,21 +54,19 @@ class CustomerController {
         listOfCustomer.remove(singlecheck.id);
       }
     }
-    print(listOfCustomer);
+    //print(listOfCustomer);
   }
 
   void addToDeleteList(String id) {
     if (!listOfCustomer.contains(id)) {
       listOfCustomer.add(id);
-      // selectedItems.add(id);
-      print(listOfCustomer);
+      // print(listOfCustomer);
     }
   }
 
   void removeFromDeleteList(String id) {
     listOfCustomer.remove(id);
-    print(listOfCustomer);
-    // selectedItems.remove(id);
+    //print(listOfCustomer);
   }
 
   Future<void> datetimepicker(BuildContext context) async {
@@ -87,7 +90,7 @@ class CustomerController {
     try {
       await deleteCustomer(listOfCustomer, context);
       listOfCustomer.clear();
-      //selectedItems.clear();
+
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
             content: Text('Selected customers deleted successfully!')),
@@ -99,6 +102,27 @@ class CustomerController {
     }
   }
 
+// Compresser & Decompressor
+
+  customerDecompresser({data}) {
+    final decompressedJsonData = base64.decode(data);
+    final decompressedBytes = GZipDecoder().decodeBytes(decompressedJsonData);
+
+    final jsonBytes = utf8.decode((decompressedBytes));
+    final datas = json.decode(jsonBytes).cast<Map<String, dynamic>>();
+    print(datas);
+    return datas;
+  }
+
+  customerCompresser({data}) {
+    final jsonBytes = utf8.encode((data));
+    final compressedBytes = GZipEncoder().encode(jsonBytes);
+
+    final compressedJsonData = base64.encode(compressedBytes!);
+
+    return compressedJsonData;
+  }
+
 //API Function
 
   Api api = Api();
@@ -108,19 +132,14 @@ class CustomerController {
 
       customerdata = fetcheddetails;
       filteredData = customerdata;
+      print('object');
+      for (var customer in customerdata) {
+        print(customer.clabel);
+      }
     } catch (e) {
       print('Error fetching products: $e');
     }
   }
-
-  // Future<void> labellist() async {
-  //   try {
-  //     List<String> list = await api.labellists();
-  //     addlist = list;
-  //   } catch (e) {
-  //     print('Error fetching products: $e');
-  //   }
-  // }
 
   Future<String?> getToken() async {
     SharedPreferences preferences = await SharedPreferences.getInstance();
@@ -208,9 +227,13 @@ class CustomerController {
     var token = await getToken();
     try {
       Uri url = Uri.parse('$dev/customer/delete');
-      var data = {
-        "id": id,
-      };
+      // var data = {
+      //   "id": id,
+      // };
+      Map<String, dynamic> listofids = {"ids": id};
+      var listofidsEncode = jsonEncode(listofids);
+      var encodedlist = customerCompresser(data: listofidsEncode.toString());
+      var data = {"id": encodedlist};
       String? body = json.encode(data);
 
       var response = await http.post(
@@ -221,7 +244,8 @@ class CustomerController {
         },
         body: body,
       );
-
+//  print(body);
+//  print(response.statusCode);
       if (response.statusCode == 200) {
         ScaffoldMessenger.of(context)
             .showSnackBar(const SnackBar(content: Text('Delete Sucessfull')));

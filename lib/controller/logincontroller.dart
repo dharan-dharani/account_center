@@ -8,8 +8,9 @@ import '../view/accountCenter.dart';
 
 class Logincontroller {
   final loginformkey = GlobalKey<FormState>();
-  final TextEditingController email = TextEditingController();
-  final TextEditingController password = TextEditingController();
+  final TextEditingController email =
+      TextEditingController(text: 'dharan123@gmail.com');
+  final TextEditingController password = TextEditingController(text: '12345');
 
   Future<String?> getToken() async {
     SharedPreferences preferences = await SharedPreferences.getInstance();
@@ -27,25 +28,25 @@ class Logincontroller {
       };
 
       String? body = json.encode(data);
-      print(body);
+      // print(body);
       var response = await http.post(url,
           headers: <String, String>{
             'Content-Type': 'application/json; charset=UTF-8',
             'Accept': 'application/json',
           },
           body: body);
-      print(response.statusCode);
-      print(response.body);
+      // print(response.statusCode);
+      // print(response.body);
       if (response.statusCode == 200) {
         ScaffoldMessenger.of(context).showSnackBar(
             const SnackBar(content: Text('Sign in  Successfull...')));
         var token = response.headers['token'];
-        print(response.headers);
+        //print(token);
         if (token != null) {
           SharedPreferences prefs = await SharedPreferences.getInstance();
           await prefs.setString("token", token);
           var tokenResponse = await getToken();
-
+          //print(tokenResponse);
           if (tokenResponse != null) {
             Navigator.push(context,
                 MaterialPageRoute(builder: (context) => const Accountcenter()));

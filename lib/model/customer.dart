@@ -1,4 +1,6 @@
+
 class customer {
+
   final String CName;
   final String? CDName;
   final String? DOB;
@@ -19,4 +21,18 @@ class customer {
     required this.id,
     this.clabel,
   });
+
+  factory customer.fromJson(Map<String?, dynamic> json) {
+    return customer(
+                id: json['_id'] ?? '',
+                CName: json['name'] ?? '',
+                Email: json['email'] ?? '',
+                CDName: json['display_name'],
+                CMobile: json['contact_number'] ?? '',
+                clabel: json['labels'] ?? '',
+                DOB: json['dob'] ?? '',
+              );
+  }
+
 }
+
