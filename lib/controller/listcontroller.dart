@@ -7,7 +7,10 @@ import 'package:account_center/constant.dart';
 import 'package:account_center/controller/api/apiconnection.dart';
 import 'package:account_center/view/customers/customers.dart';
 import 'package:flutter/material.dart';
+<<<<<<< HEAD
 import 'package:shared_preferences/shared_preferences.dart';
+=======
+>>>>>>> 01de4179c37970be9af977bea5b34a7d63612d51
 
 class Listcontroller {
   final TextEditingController list = TextEditingController();
