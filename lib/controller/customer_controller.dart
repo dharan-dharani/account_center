@@ -2,7 +2,7 @@ import 'dart:convert';
 import 'package:archive/archive.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
-import 'package:account_center/controller/api/apiconnection.dart';
+import 'package:account_center/controller/api/api_connection.dart';
 import 'package:account_center/model/customer.dart';
 import 'package:account_center/view/customers/customers.dart';
 import 'package:flutter/material.dart';
@@ -270,7 +270,7 @@ addassignlist(String name) {
 // Label Add
 
 Future<void> addlistlabel(String id, BuildContext context) async {
-    var token = await logincontroller.getToken();
+    var token = await userController.getToken();
     print(token);
     try {
       Uri url = Uri.parse('$dev/label/add');
@@ -352,7 +352,7 @@ Future<void> addlistlabel(String id, BuildContext context) async {
 // Label Assign
 
 Future<void> assignlistlabel(BuildContext context) async {
-    var token = await logincontroller.getToken();
+    var token = await userController.getToken();
 
     var id = customerController.listOfCustomer;
 
@@ -455,7 +455,7 @@ Future<void> assignlistlabel(BuildContext context) async {
 // Label Delete
 
   Future<void> deleteListlabel(String chipname, BuildContext context) async {
-    var token = await logincontroller.getToken();
+    var token = await userController.getToken();
     print(token);
     try {
       Uri url = Uri.parse('$dev/label/delete');

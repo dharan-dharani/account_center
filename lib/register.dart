@@ -1,5 +1,5 @@
 import 'package:account_center/constant.dart';
-import 'package:account_center/controller/registercontroller.dart';
+import 'package:account_center/controller/user_controller.dart';
 import 'package:flutter/material.dart';
 
 class Register extends StatefulWidget {
@@ -9,7 +9,7 @@ class Register extends StatefulWidget {
   Signup createState() => Signup();
 }
 
-Registercontroller registercontroller = Registercontroller();
+UserController userController = UserController();
 
 class Signup extends State<Register> {
   @override
@@ -36,7 +36,7 @@ class Signup extends State<Register> {
               height: 550,
               width: 500,
               child: Form(
-                key: registercontroller.registerformkey,
+                key: userController.registerformkey,
                 child: SingleChildScrollView(
                   child: Column(
                     children: [
@@ -50,7 +50,7 @@ class Signup extends State<Register> {
                       ),
                       const SizedBox(height: 20),
                       TextFormField(
-                        controller: registercontroller.organizationname,
+                        controller: userController.organizationname,
                         validator: (value) {
                           if (value == null || value.isEmpty) {
                             return "Please Enter your Organization Name";
@@ -94,7 +94,7 @@ class Signup extends State<Register> {
                       ),
                       const SizedBox(height: 20),
                       TextFormField(
-                        controller: registercontroller.name,
+                        controller: userController.name,
                         validator: (value) {
                           if (value == null || value.isEmpty) {
                             return "Please Enter your User Name";
@@ -138,7 +138,7 @@ class Signup extends State<Register> {
                       ),
                       const SizedBox(height: 20),
                       TextFormField(
-                        controller: registercontroller.mobileno,
+                        controller: userController.mobileno,
                         validator: (value) {
                           if (value == null || value.isEmpty) {
                             return "Please Enter your Mobile Number";
@@ -186,7 +186,7 @@ class Signup extends State<Register> {
                           }
                           return null;
                         },
-                        controller: registercontroller.email,
+                        controller: userController.email,
                         decoration: InputDecoration(
                           fillColor: white,
                           filled: true,
@@ -228,7 +228,7 @@ class Signup extends State<Register> {
                           }
                           return null;
                         },
-                        controller: registercontroller.password,
+                        controller: userController.password,
                         decoration: InputDecoration(
                           fillColor: white,
                           filled: true,
@@ -266,12 +266,12 @@ class Signup extends State<Register> {
                       const SizedBox(height: 20),
                       OutlinedButton(
                           onPressed: () {
-                            registercontroller.register(
-                                registercontroller.organizationname.text,
-                                registercontroller.name.text,
-                                registercontroller.email.text,
-                                registercontroller.mobileno.text,
-                                registercontroller.password.text,
+                            userController.register(
+                                userController.organizationname.text,
+                                userController.name.text,
+                                userController.email.text,
+                                userController.mobileno.text,
+                                userController.password.text,
                                 context);
                           },
                           style: OutlinedButton.styleFrom(

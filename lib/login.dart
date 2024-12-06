@@ -1,5 +1,5 @@
 import 'package:account_center/constant.dart';
-import 'package:account_center/controller/logincontroller.dart';
+import 'package:account_center/controller/user_controller.dart';
 import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:flutter/material.dart';
 
@@ -10,7 +10,7 @@ class Login extends StatefulWidget {
   FormPage createState() => FormPage();
 }
 
-Logincontroller logincontroller = Logincontroller();
+UserController userController = UserController();
 
 class FormPage extends State<Login> {
   @override
@@ -40,7 +40,7 @@ class FormPage extends State<Login> {
               height: 350,
               width: 500,
               child: Form(
-                  key: logincontroller.loginformkey,
+                  key: userController.loginformkey,
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     crossAxisAlignment: CrossAxisAlignment.center,
@@ -56,7 +56,7 @@ class FormPage extends State<Login> {
                           ])),
                       const SizedBox(height: 20),
                       TextFormField(
-                        controller: logincontroller.email,
+                        controller: userController.email,
                         decoration: InputDecoration(
                           fillColor: white,
                           filled: true,
@@ -100,7 +100,7 @@ class FormPage extends State<Login> {
                       ),
                       const SizedBox(height: 30),
                       TextFormField(
-                        controller: logincontroller.password,
+                        controller: userController.password,
                         decoration: InputDecoration(
                           fillColor: white,
                           filled: true,
@@ -146,8 +146,8 @@ class FormPage extends State<Login> {
                       const SizedBox(height: 20),
                       OutlinedButton(
                           onPressed: () {
-                            logincontroller.login(logincontroller.email.text,
-                                logincontroller.password.text, context);
+                            userController.login(userController.email.text,
+                                userController.password.text, context);
                           },
                           style: OutlinedButton.styleFrom(
                               minimumSize: const Size(110, 50),

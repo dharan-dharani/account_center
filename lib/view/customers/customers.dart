@@ -1,6 +1,6 @@
 import 'package:account_center/constant.dart';
-import 'package:account_center/controller/api/apiconnection.dart';
-import 'package:account_center/controller/customercontroller.dart';
+import 'package:account_center/controller/api/api_connection.dart';
+import 'package:account_center/controller/customer_controller.dart';
 import 'package:account_center/model/customer.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
