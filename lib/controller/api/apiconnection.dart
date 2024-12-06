@@ -1,18 +1,22 @@
 import 'dart:convert';
 import 'package:account_center/constant.dart';
-import 'package:account_center/model/chiplist.dart';
 import 'package:http/http.dart' as http;
 
 import 'package:shared_preferences/shared_preferences.dart';
 
 class Api {
+
+// get Token 
+
   Future<String?> getToken() async {
     SharedPreferences preferences = await SharedPreferences.getInstance();
     String? token = preferences.getString("token");
     return token;
   }
 
-  Future apiconnection() async {
+// Customer get route
+
+  Future customerlists() async {
     var token = await getToken();
     Uri url = Uri.parse('$dev/customer/list');
     final response = await http.get(
@@ -26,7 +30,7 @@ class Api {
     // print(response.statusCode);
 
     if (response.statusCode == 200) {
-        return response.body;
+      return response.body;
     } else {
       Map<String, dynamic> jsonData = json.decode(response.body);
       print(jsonData['message']);
@@ -34,9 +38,10 @@ class Api {
     }
   }
 
-  Future<List<Chiplist>> labellists() async {
-    // print('called');
-    var token = await getToken();
+//label get route
+
+  Future labellists() async {
+   var token = await getToken();
     Uri url = Uri.parse('$dev/label/list');
     final response = await http.get(
       url,
@@ -48,10 +53,7 @@ class Api {
     // print(response.body);
     // print(response.statusCode);
     if (response.statusCode == 200) {
-      Map<String, dynamic> jsonData = json.decode(response.body);
-      List<dynamic> dataList = jsonData['labels'];
-      print(dataList);
-      return dataList.map((json) => Chiplist(chipname: json)).toList();
+      return response.body;
     } else {
       Map<String, dynamic> jsonData = json.decode(response.body);
       print(jsonData['message']);

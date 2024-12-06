@@ -37,10 +37,10 @@ class Registercontroller {
 
       if (response.statusCode == 200) {
         ScaffoldMessenger.of(context)
-            .showSnackBar(SnackBar(content: Text('Sign up Sucessfull')));
+            .showSnackBar(const SnackBar(content: Text('Sign up Sucessfull')));
       } else {
         ScaffoldMessenger.of(context)
-            .showSnackBar(SnackBar(content: Text('Sign up failed')));
+            .showSnackBar(const SnackBar(content: Text('Sign up failed')));
       }
     } catch (e) {
       print("agent_error: $e");

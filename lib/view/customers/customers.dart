@@ -1,7 +1,6 @@
 import 'package:account_center/constant.dart';
 import 'package:account_center/controller/api/apiconnection.dart';
 import 'package:account_center/controller/customercontroller.dart';
-import 'package:account_center/controller/listcontroller.dart';
 import 'package:account_center/model/customer.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -14,8 +13,6 @@ class Customers extends StatefulWidget {
   State<Customers> createState() => CustomerState();
 }
 
-//CustomerController customerController = CustomerController();
-Listcontroller listcontroller = Listcontroller();
 Api api = Api();
 final CustomerController customerController = Get.put(CustomerController());
 
@@ -24,7 +21,7 @@ class CustomerState extends State<Customers> {
   void initState() {
     super.initState();
     customerController.filteredData = customerController.customerdata;
-    listcontroller.filteredlabellist = listcontroller.chipslist;
+    //listcontroller.filteredlabellist = listcontroller.chipslist;
     customerController.fetchlist();
     //listcontroller.fetchlabellist();
   }
@@ -43,7 +40,7 @@ class CustomerState extends State<Customers> {
                     child: Wrap(
                       spacing: 8.0,
                       runSpacing: 8.0,
-                      children: listcontroller.chipslist.map((chip) {
+                      children: customerController.chipslist.map((chip) {
                         return FilterChip(
                           label: Text(chip.chipname),
                           selected: chip.chipselect,
@@ -51,9 +48,9 @@ class CustomerState extends State<Customers> {
                             setState(() {
                               chip.chipselect = value;
                               if (chip.chipselect) {
-                                listcontroller.addassignlist(chip.chipname);
+                                customerController.addassignlist(chip.chipname);
                               } else {
-                                listcontroller.removeassignlist(chip.chipname);
+                                customerController.removeassignlist(chip.chipname);
                               }
                             });
                           },
@@ -80,7 +77,7 @@ class CustomerState extends State<Customers> {
                         const SizedBox(width: 10),
                         OutlinedButton(
                             onPressed: () {
-                              listcontroller.assignlistlabel(context).then((_) {
+                              customerController.assignlistlabel(context).then((_) {
                                 setState(() {});
                               });
 
@@ -144,7 +141,7 @@ class CustomerState extends State<Customers> {
                             ),
                           ],
                         ),
-                        Container(
+                        SizedBox(
                           width: 300,
                           height: 40,
                           child: TextFormField(
@@ -192,14 +189,14 @@ class CustomerState extends State<Customers> {
                                     color: primaryColor, width: 2),
                                 shape: RoundedRectangleBorder(
                                     borderRadius: BorderRadius.circular(10))),
-                            child: Text(
+                            child: const Text(
                                 // customerController.isSelectAll.value ||
                                 //         customerController
                                 //             .listOfCustomer.isNotEmpty
                                 //     ? 'Delete'
                                 //     : 'Import',
                                 'Del',
-                                style: const TextStyle(
+                                style: TextStyle(
                                     color: primaryColor,
                                     fontWeight: FontWeight.bold,
                                     fontSize: 14))),
@@ -236,24 +233,24 @@ class CustomerState extends State<Customers> {
                   ),
                   Obx(() {
                     if (customerController.customerdata.isEmpty) {
-                      return Text('No Data');
+                      return const Text('No Data');
                     }
                     return PaginatedDataTable(
                       columns: [
-                        DataColumn(
-                            label: Container(
+                        const DataColumn(
+                            label: SizedBox(
                                 width: 250,
-                                child: const Text(
+                                child: Text(
                                   'Name',
                                   style: TextStyle(
                                       fontWeight: FontWeight.bold,
                                       color: Colors.black,
                                       fontSize: 16),
                                 ))),
-                        DataColumn(
-                            label: Container(
+                        const DataColumn(
+                            label: SizedBox(
                                 width: 250,
-                                child: const Text(
+                                child: Text(
                                   'Email/Number',
                                   style: TextStyle(
                                       fontWeight: FontWeight.bold,
@@ -261,7 +258,7 @@ class CustomerState extends State<Customers> {
                                       fontSize: 16),
                                 ))),
                         DataColumn(
-                            label: Container(
+                            label: SizedBox(
                           width: 200,
                           child: Row(
                             children: [
@@ -339,13 +336,13 @@ class CustomerState extends State<Customers> {
                                             // crossAxisAlignment: CrossAxisAlignment.start,
                                             children: [
                                               TextFormField(
-                                                controller: listcontroller.list,
+                                                controller: customerController.list,
                                                 decoration: InputDecoration(
                                                   fillColor: white,
                                                   filled: true,
                                                   labelText: 'List Name',
                                                   labelStyle:
-                                                      TextStyle(color: black),
+                                                      const TextStyle(color: black),
                                                   enabledBorder:
                                                       OutlineInputBorder(
                                                     borderRadius:
@@ -401,9 +398,9 @@ class CustomerState extends State<Customers> {
                                                   const SizedBox(width: 10),
                                                   OutlinedButton(
                                                       onPressed: () {
-                                                        listcontroller
+                                                        customerController
                                                             .addlistlabel(
-                                                                listcontroller
+                                                                customerController
                                                                     .list.text,
                                                                 context)
                                                             .then((_) {
@@ -457,7 +454,7 @@ class CustomerState extends State<Customers> {
                       ),
                     ),
                     const SizedBox(height: 10),
-                    Container(
+                    SizedBox(
                       width: 220,
                       height: 40,
                       child: TextFormField(
@@ -485,7 +482,7 @@ class CustomerState extends State<Customers> {
                     ),
                     Expanded(
                       child: ListView.builder(
-                          itemCount: listcontroller.chipslist.length,
+                          itemCount: customerController.chipslist.length,
                           itemBuilder: (context, index) {
                             return Padding(
                               padding: const EdgeInsets.all(8.0),
@@ -508,7 +505,7 @@ class CustomerState extends State<Customers> {
                                     maxRadius: 20,
                                   ),
                                   title: Text(
-                                      listcontroller.chipslist[index].chipname),
+                                      customerController.chipslist[index].chipname),
                                   subtitle: const Text(
                                     '(0) Contacts',
                                     style: TextStyle(
@@ -516,9 +513,9 @@ class CustomerState extends State<Customers> {
                                   ),
                                   trailing: InkWell(
                                     onTap: () {
-                                      listcontroller
+                                      customerController
                                           .deleteListlabel(
-                                              listcontroller
+                                              customerController
                                                   .chipslist[index].chipname,
                                               context)
                                           .then((_) {
@@ -565,7 +562,7 @@ class CustomerState extends State<Customers> {
                       },
                       decoration: InputDecoration(
                         labelText: 'Customer Name',
-                        labelStyle: TextStyle(color: black),
+                        labelStyle: const TextStyle(color: black),
                         enabledBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(10),
                           borderSide:
@@ -601,7 +598,7 @@ class CustomerState extends State<Customers> {
                       },
                       decoration: InputDecoration(
                         labelText: 'Customer Display Name',
-                        labelStyle: TextStyle(color: black),
+                        labelStyle: const TextStyle(color: black),
                         enabledBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(10),
                           borderSide:
@@ -637,7 +634,7 @@ class CustomerState extends State<Customers> {
                       },
                       decoration: InputDecoration(
                         labelText: 'Date of Birth',
-                        labelStyle: TextStyle(color: black),
+                        labelStyle: const TextStyle(color: black),
                         suffixIcon: IconButton(
                             onPressed: () {
                               customerController
@@ -685,7 +682,7 @@ class CustomerState extends State<Customers> {
                       },
                       decoration: InputDecoration(
                         labelText: 'Customer Mobile Number',
-                        labelStyle: TextStyle(color: black),
+                        labelStyle: const TextStyle(color: black),
                         enabledBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(10),
                           borderSide:
@@ -728,7 +725,7 @@ class CustomerState extends State<Customers> {
                       },
                       decoration: InputDecoration(
                         labelText: 'Customer Email',
-                        labelStyle: TextStyle(color: black),
+                        labelStyle: const TextStyle(color: black),
                         enabledBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(10),
                           borderSide:
@@ -950,7 +947,7 @@ class ShowCustomerInfo extends DataTableSource {
               },
               decoration: InputDecoration(
                 labelText: 'Customer Name',
-                labelStyle: TextStyle(color: black),
+                labelStyle: const TextStyle(color: black),
                 enabledBorder: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(10),
                   borderSide: const BorderSide(color: primaryColor, width: 2),
@@ -985,7 +982,7 @@ class ShowCustomerInfo extends DataTableSource {
               },
               decoration: InputDecoration(
                 labelText: 'Customer Display Name',
-                labelStyle: TextStyle(color: black),
+                labelStyle: const TextStyle(color: black),
                 enabledBorder: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(10),
                   borderSide: const BorderSide(color: primaryColor, width: 2),
@@ -1017,7 +1014,7 @@ class ShowCustomerInfo extends DataTableSource {
               },
               decoration: InputDecoration(
                 labelText: 'Date of Birth',
-                labelStyle: TextStyle(color: black),
+                labelStyle: const TextStyle(color: black),
                 suffixIcon: IconButton(
                     onPressed: () {
                       //datetimepicker(context);
@@ -1057,7 +1054,7 @@ class ShowCustomerInfo extends DataTableSource {
               },
               decoration: InputDecoration(
                 labelText: 'Customer Mobile Number',
-                labelStyle: TextStyle(color: black),
+                labelStyle: const TextStyle(color: black),
                 enabledBorder: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(10),
                   borderSide: const BorderSide(color: primaryColor, width: 2),
@@ -1093,7 +1090,7 @@ class ShowCustomerInfo extends DataTableSource {
               },
               decoration: InputDecoration(
                 labelText: 'Customer Email',
-                labelStyle: TextStyle(color: black),
+                labelStyle: const TextStyle(color: black),
                 enabledBorder: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(10),
                   borderSide: const BorderSide(color: primaryColor, width: 2),
