@@ -56,7 +56,7 @@ class FormPage extends State<Login> {
                           ])),
                       const SizedBox(height: 20),
                       TextFormField(
-                        controller: userController.email,
+                        controller: userController.loginemail,
                         decoration: InputDecoration(
                           fillColor: white,
                           filled: true,
@@ -100,7 +100,7 @@ class FormPage extends State<Login> {
                       ),
                       const SizedBox(height: 30),
                       TextFormField(
-                        controller: userController.password,
+                        controller: userController.loginpassword,
                         decoration: InputDecoration(
                           fillColor: white,
                           filled: true,
