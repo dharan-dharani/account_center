@@ -4,6 +4,7 @@ import 'package:account_center/controller/customercontroller.dart';
 import 'package:account_center/controller/listcontroller.dart';
 import 'package:account_center/model/customer.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 
 class Customers extends StatefulWidget {
@@ -13,9 +14,10 @@ class Customers extends StatefulWidget {
   State<Customers> createState() => CustomerState();
 }
 
-CustomerController customerController = CustomerController();
+//CustomerController customerController = CustomerController();
 Listcontroller listcontroller = Listcontroller();
 Api api = Api();
+final CustomerController customerController = Get.put(CustomerController());
 
 class CustomerState extends State<Customers> {
   @override
@@ -23,20 +25,8 @@ class CustomerState extends State<Customers> {
     super.initState();
     customerController.filteredData = customerController.customerdata;
     listcontroller.filteredlabellist = listcontroller.chipslist;
-    customerController.fetchlist().then((_) {
-      setState(() {
-        // print('set state');
-      });
-    });
-    listcontroller.fetchlabellist().then((_) {
-      setState(() {
-        // print('set state');
-      });
-    });
-  }
-
-  refreshParent() {
-    setState(() {}); // Refresh parent state
+    customerController.fetchlist();
+    //listcontroller.fetchlabellist();
   }
 
   @override
@@ -168,8 +158,7 @@ class CustomerState extends State<Customers> {
                                   onPressed: () {
                                     customerController.search.clear();
                                     setState(() {
-                                      customerController.filterData(
-                                          '', refreshParent);
+                                      customerController.filterData('');
                                     });
                                   },
                                   icon: const Icon(Icons.close)),
@@ -188,21 +177,14 @@ class CustomerState extends State<Customers> {
                             ),
                             onChanged: (query) {
                               setState(() {
-                                customerController.filterData(
-                                    query, refreshParent);
+                                customerController.filterData(query);
                               });
                             },
                           ),
                         ),
                         OutlinedButton(
                             onPressed: () {
-                              customerController
-                                  .deleteSelectedCustomers(context)
-                                  .then((_) {
-                                setState(() {
-                                  // print('set state');
-                                });
-                              });
+                              customerController.deleteSelectedCustomers();
                             },
                             style: OutlinedButton.styleFrom(
                                 minimumSize: const Size(110, 50),
@@ -211,27 +193,24 @@ class CustomerState extends State<Customers> {
                                 shape: RoundedRectangleBorder(
                                     borderRadius: BorderRadius.circular(10))),
                             child: Text(
-                                customerController.isSelectAll ||
-                                        customerController
-                                            .listOfCustomer.isNotEmpty
-                                    ? 'Delete'
-                                    : 'Import',
+                                // customerController.isSelectAll.value ||
+                                //         customerController
+                                //             .listOfCustomer.isNotEmpty
+                                //     ? 'Delete'
+                                //     : 'Import',
+                                'Del',
                                 style: const TextStyle(
                                     color: primaryColor,
                                     fontWeight: FontWeight.bold,
                                     fontSize: 14))),
                         OutlinedButton(
                             onPressed: () {
-                              if (customerController.isSelectAll ||
+                              if (customerController.isSelectAll.value ||
                                   customerController
                                       .listOfCustomer.isNotEmpty) {
-                                chips().then((_) {
-                                  setState(() {});
-                                }); // Assign action
+                                chips();
                               } else {
-                                dialogMethod().then((_) {
-                                  setState(() {});
-                                });
+                                dialogMethod();
                                 // Add action
                               }
                             },
@@ -243,7 +222,7 @@ class CustomerState extends State<Customers> {
                                 shape: RoundedRectangleBorder(
                                     borderRadius: BorderRadius.circular(10))),
                             child: Text(
-                                customerController.isSelectAll ||
+                                customerController.isSelectAll.value ||
                                         customerController
                                             .listOfCustomer.isNotEmpty
                                     ? 'Assign'
@@ -255,8 +234,11 @@ class CustomerState extends State<Customers> {
                       ],
                     ),
                   ),
-                  SingleChildScrollView(
-                    child: PaginatedDataTable(
+                  Obx(() {
+                    if (customerController.customerdata.isEmpty) {
+                      return Text('No Data');
+                    }
+                    return PaginatedDataTable(
                       columns: [
                         DataColumn(
                             label: Container(
@@ -291,33 +273,28 @@ class CustomerState extends State<Customers> {
                                     fontSize: 16),
                               ),
                               Checkbox(
-                                  value: customerController.isSelectAll,
+                                  value: customerController.isSelectAll.value,
                                   onChanged: (bool? value) {
                                     setState(() {
-                                      customerController.isSelectAll = value!;
+                                      customerController.isSelectAll.value =
+                                          value!;
                                       customerController.checkaddall(
-                                          customerController.isSelectAll);
+                                          customerController.isSelectAll.value);
                                     });
                                   })
                             ],
                           ),
                         )),
                       ],
-                      source: showCustomerInfo(
-                          context: context,
-                          data: customerController.filteredData,
-                          // customerController.customerdata,
-                          notifyParent: () {
-                            refreshParent();
-                          }),
+                      source: ShowCustomerInfo(customerController.customerdata),
                       dataRowMaxHeight: 80,
                       headingRowColor:
                           const WidgetStatePropertyAll(Colors.white),
                       rowsPerPage: 5,
                       columnSpacing: 20,
                       showCheckboxColumn: true,
-                    ),
-                  )
+                    );
+                  })
                 ],
               ),
             ),
@@ -809,17 +786,14 @@ class CustomerState extends State<Customers> {
                             onPressed: () {
                               if (customerController.forms.currentState!
                                   .validate()) {
-                                customerController
-                                    .addcustomers(
-                                        customerController.cname.text,
-                                        customerController.cdname.text,
-                                        customerController.email.text,
-                                        customerController.cmobileno.text,
-                                        customerController.dob.text,
-                                        context)
-                                    .then((_) {
-                                  setState(() {});
-                                });
+                                customerController.addcustomers(
+                                  customerController.cname.text,
+                                  customerController.cdname.text,
+                                  customerController.email.text,
+                                  customerController.cmobileno.text,
+                                  customerController.dob.text,
+                                );
+
                                 customerController.cname.clear();
                                 customerController.cdname.clear();
                                 customerController.dob.clear();
@@ -851,18 +825,22 @@ class CustomerState extends State<Customers> {
   }
 }
 
-class showCustomerInfo extends DataTableSource {
-  final Function() notifyParent;
-  final BuildContext context;
+class ShowCustomerInfo extends DataTableSource {
+  //final BuildContext context;
+  // final List<customer> data;
+  // ShowCustomerInfo(
+  //  {
+  //   //required this.context,
+  //    this.data,
+  // });
+
   final List<customer> data;
-  showCustomerInfo({
-    required this.context,
-    required this.data,
-    required this.notifyParent,
-  });
+
+  ShowCustomerInfo(this.data);
 
   @override
-  DataRow getRow(int index) {
+  DataRow? getRow(int index) {
+    if (index >= data.length) return null;
     final row = data[index];
     return DataRow.byIndex(
       index: index,
@@ -894,23 +872,23 @@ class showCustomerInfo extends DataTableSource {
             IconButton(
                 onPressed: () async {
                   await updatedialogMethod(index);
-                  notifyParent();
                 },
                 icon: const Icon(Icons.edit)),
-            Checkbox(
-              value: row.isclick,
-              onChanged: (bool? value) {
-                row.isclick = value!;
-                if (row.isclick) {
-                  customerController.addToDeleteList(row.id);
-                  notifyParent();
-                  // Add to delete list
-                } else {
-                  customerController.removeFromDeleteList(row.id);
-                  notifyParent(); // Remove from delete list
-                }
+            Obx(
+              () {
+                return Checkbox(
+                  value: row.isclick.value,
+                  onChanged: (bool? value) {
+                    row.isclick.value = value!;
+                    if (row.isclick.value) {
+                      customerController.addToDeleteList(row.id);
+                    } else {
+                      customerController.removeFromDeleteList(row.id);
+                    }
+                  },
+                );
               },
-            ),
+            )
           ],
         )),
       ],
@@ -952,280 +930,250 @@ class showCustomerInfo extends DataTableSource {
       }
     }
 
-    return showDialog(
-        context: context,
-        builder: (BuildContext context) => AlertDialog(
-              contentPadding:
-                  const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
-              title: const Text('Update Customer'),
-              content: Form(
-                key: customerController.forms,
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  // crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    TextFormField(
-                      controller: updatecname,
-                      validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return 'Please Enter Your Name';
-                        }
-                        return null;
-                      },
-                      decoration: InputDecoration(
-                        labelText: 'Customer Name',
-                        labelStyle: TextStyle(color: black),
-                        enabledBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(10),
-                          borderSide:
-                              const BorderSide(color: primaryColor, width: 2),
-                        ),
-                        focusedBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(10),
-                          borderSide: const BorderSide(
-                            color: primaryColor,
-                            width: 2,
-                          ),
-                        ),
-                        errorBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(10),
-                          borderSide:
-                              const BorderSide(color: primaryColor, width: 2),
-                        ),
-                        focusedErrorBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(10),
-                          borderSide:
-                              const BorderSide(color: primaryColor, width: 2),
-                        ),
-                        fillColor: white,
-                        filled: true,
-                      ),
-                    ),
-                    const SizedBox(height: 10),
-                    TextFormField(
-                      controller: updatecdname,
-                      validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return 'Please Enter Your Display Name';
-                        }
-                        return null;
-                      },
-                      decoration: InputDecoration(
-                        labelText: 'Customer Display Name',
-                        labelStyle: TextStyle(color: black),
-                        enabledBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(10),
-                          borderSide:
-                              const BorderSide(color: primaryColor, width: 2),
-                        ),
-                        focusedBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(10),
-                          borderSide:
-                              const BorderSide(color: primaryColor, width: 2),
-                        ),
-                        errorBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(10),
-                          borderSide:
-                              const BorderSide(color: primaryColor, width: 2),
-                        ),
-                        focusedErrorBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(10),
-                          borderSide:
-                              const BorderSide(color: primaryColor, width: 2),
-                        ),
-                        fillColor: white,
-                        filled: true,
-                      ),
-                    ),
-                    const SizedBox(height: 10),
-                    TextFormField(
-                      controller: updatedob,
-                      validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return 'Please Enter Your Date of Birth';
-                        }
-                        return null;
-                      },
-                      decoration: InputDecoration(
-                        labelText: 'Date of Birth',
-                        labelStyle: TextStyle(color: black),
-                        suffixIcon: IconButton(
-                            onPressed: () {
-                              datetimepicker(context);
-                            },
-                            icon: const Icon(Icons.calendar_month_outlined)),
-                        enabledBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(10),
-                          borderSide:
-                              const BorderSide(color: primaryColor, width: 2),
-                        ),
-                        focusedBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(10),
-                          borderSide:
-                              const BorderSide(color: primaryColor, width: 2),
-                        ),
-                        errorBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(10),
-                          borderSide:
-                              const BorderSide(color: primaryColor, width: 2),
-                        ),
-                        focusedErrorBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(10),
-                          borderSide:
-                              const BorderSide(color: primaryColor, width: 2),
-                        ),
-                        fillColor: white,
-                        filled: true,
-                      ),
-                    ),
-                    const SizedBox(height: 10),
-                    TextFormField(
-                      controller: updatecmo,
-                      validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return 'Please Enter Your Mobile Number';
-                        }
-                        if (!RegExp(r'^[6-9]\d{9}$').hasMatch(value)) {
-                          return 'Please enter a valid 10-digit mobile number.';
-                        }
-                        return null;
-                      },
-                      decoration: InputDecoration(
-                        labelText: 'Customer Mobile Number',
-                        labelStyle: TextStyle(color: black),
-                        enabledBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(10),
-                          borderSide:
-                              const BorderSide(color: primaryColor, width: 2),
-                        ),
-                        focusedBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(10),
-                          borderSide:
-                              const BorderSide(color: primaryColor, width: 2),
-                        ),
-                        errorBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(10),
-                          borderSide:
-                              const BorderSide(color: primaryColor, width: 2),
-                        ),
-                        focusedErrorBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(10),
-                          borderSide:
-                              const BorderSide(color: primaryColor, width: 2),
-                        ),
-                        fillColor: white,
-                        filled: true,
-                      ),
-                    ),
-                    const SizedBox(height: 10),
-                    TextFormField(
-                      controller: updateemail,
-                      validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return 'Please Enter Your Email Address';
-                        }
-                        if (!RegExp(
-                                r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$')
-                            .hasMatch(value)) {
-                          return 'Please enter a valid email address.';
-                        }
-                        return null;
-                      },
-                      decoration: InputDecoration(
-                        labelText: 'Customer Email',
-                        labelStyle: TextStyle(color: black),
-                        enabledBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(10),
-                          borderSide:
-                              const BorderSide(color: primaryColor, width: 2),
-                        ),
-                        focusedBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(10),
-                          borderSide:
-                              const BorderSide(color: primaryColor, width: 2),
-                        ),
-                        errorBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(10),
-                          borderSide:
-                              const BorderSide(color: primaryColor, width: 2),
-                        ),
-                        focusedErrorBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(10),
-                          borderSide:
-                              const BorderSide(color: primaryColor, width: 2),
-                        ),
-                        fillColor: white,
-                        filled: true,
-                      ),
-                    ),
-                    const SizedBox(height: 10),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      // crossAxisAlignment: CrossAxisAlignment.baseline,
-                      children: [
-                        OutlinedButton(
-                            onPressed: () {
-                              {
-                                updatecname.clear();
-                                updatecdname.clear();
-                                updatedob.clear();
-
-                                updatecmo.clear();
-                                updateemail.clear();
-                              }
-                              Navigator.pop(context);
-                            },
-                            style: OutlinedButton.styleFrom(
-                                minimumSize: const Size(110, 50),
-                                side: const BorderSide(
-                                    color: primaryColor, width: 2),
-                                shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(10))),
-                            child: const Text('Clear',
-                                style: TextStyle(
-                                    color: primaryColor,
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 14))),
-                        const SizedBox(width: 10),
-                        OutlinedButton(
-                          onPressed: () {
-                            if (customerController.forms.currentState!
-                                .validate()) {
-                              customerController
-                                  .update(
-                                      updatecname.text,
-                                      updatecdname.text,
-                                      updateemail.text,
-                                      updatecmo.text,
-                                      updatedob.text,
-                                      customerController.customerdata[index].id,
-                                      context)
-                                  .then((_) {
-                                notifyParent();
-                              });
-
-                              Navigator.pop(context);
-                            }
-                          },
-                          style: OutlinedButton.styleFrom(
-                              minimumSize: const Size(110, 50),
-                              backgroundColor: primaryColor,
-                              side: const BorderSide(
-                                  color: primaryColor, width: 2),
-                              shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(10))),
-                          child: const Text('Update',
-                              style: TextStyle(
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 14)),
-                        ),
-                      ],
-                    )
-                  ],
+    return Get.dialog(AlertDialog(
+      contentPadding: const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
+      title: const Text('Update Customer'),
+      content: Form(
+        key: customerController.forms,
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          // crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            TextFormField(
+              controller: updatecname,
+              validator: (value) {
+                if (value == null || value.isEmpty) {
+                  return 'Please Enter Your Name';
+                }
+                return null;
+              },
+              decoration: InputDecoration(
+                labelText: 'Customer Name',
+                labelStyle: TextStyle(color: black),
+                enabledBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(10),
+                  borderSide: const BorderSide(color: primaryColor, width: 2),
                 ),
+                focusedBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(10),
+                  borderSide: const BorderSide(
+                    color: primaryColor,
+                    width: 2,
+                  ),
+                ),
+                errorBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(10),
+                  borderSide: const BorderSide(color: primaryColor, width: 2),
+                ),
+                focusedErrorBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(10),
+                  borderSide: const BorderSide(color: primaryColor, width: 2),
+                ),
+                fillColor: white,
+                filled: true,
               ),
-            ));
+            ),
+            const SizedBox(height: 10),
+            TextFormField(
+              controller: updatecdname,
+              validator: (value) {
+                if (value == null || value.isEmpty) {
+                  return 'Please Enter Your Display Name';
+                }
+                return null;
+              },
+              decoration: InputDecoration(
+                labelText: 'Customer Display Name',
+                labelStyle: TextStyle(color: black),
+                enabledBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(10),
+                  borderSide: const BorderSide(color: primaryColor, width: 2),
+                ),
+                focusedBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(10),
+                  borderSide: const BorderSide(color: primaryColor, width: 2),
+                ),
+                errorBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(10),
+                  borderSide: const BorderSide(color: primaryColor, width: 2),
+                ),
+                focusedErrorBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(10),
+                  borderSide: const BorderSide(color: primaryColor, width: 2),
+                ),
+                fillColor: white,
+                filled: true,
+              ),
+            ),
+            const SizedBox(height: 10),
+            TextFormField(
+              controller: updatedob,
+              validator: (value) {
+                if (value == null || value.isEmpty) {
+                  return 'Please Enter Your Date of Birth';
+                }
+                return null;
+              },
+              decoration: InputDecoration(
+                labelText: 'Date of Birth',
+                labelStyle: TextStyle(color: black),
+                suffixIcon: IconButton(
+                    onPressed: () {
+                      //datetimepicker(context);
+                    },
+                    icon: const Icon(Icons.calendar_month_outlined)),
+                enabledBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(10),
+                  borderSide: const BorderSide(color: primaryColor, width: 2),
+                ),
+                focusedBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(10),
+                  borderSide: const BorderSide(color: primaryColor, width: 2),
+                ),
+                errorBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(10),
+                  borderSide: const BorderSide(color: primaryColor, width: 2),
+                ),
+                focusedErrorBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(10),
+                  borderSide: const BorderSide(color: primaryColor, width: 2),
+                ),
+                fillColor: white,
+                filled: true,
+              ),
+            ),
+            const SizedBox(height: 10),
+            TextFormField(
+              controller: updatecmo,
+              validator: (value) {
+                if (value == null || value.isEmpty) {
+                  return 'Please Enter Your Mobile Number';
+                }
+                if (!RegExp(r'^[6-9]\d{9}$').hasMatch(value)) {
+                  return 'Please enter a valid 10-digit mobile number.';
+                }
+                return null;
+              },
+              decoration: InputDecoration(
+                labelText: 'Customer Mobile Number',
+                labelStyle: TextStyle(color: black),
+                enabledBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(10),
+                  borderSide: const BorderSide(color: primaryColor, width: 2),
+                ),
+                focusedBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(10),
+                  borderSide: const BorderSide(color: primaryColor, width: 2),
+                ),
+                errorBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(10),
+                  borderSide: const BorderSide(color: primaryColor, width: 2),
+                ),
+                focusedErrorBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(10),
+                  borderSide: const BorderSide(color: primaryColor, width: 2),
+                ),
+                fillColor: white,
+                filled: true,
+              ),
+            ),
+            const SizedBox(height: 10),
+            TextFormField(
+              controller: updateemail,
+              validator: (value) {
+                if (value == null || value.isEmpty) {
+                  return 'Please Enter Your Email Address';
+                }
+                if (!RegExp(r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$')
+                    .hasMatch(value)) {
+                  return 'Please enter a valid email address.';
+                }
+                return null;
+              },
+              decoration: InputDecoration(
+                labelText: 'Customer Email',
+                labelStyle: TextStyle(color: black),
+                enabledBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(10),
+                  borderSide: const BorderSide(color: primaryColor, width: 2),
+                ),
+                focusedBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(10),
+                  borderSide: const BorderSide(color: primaryColor, width: 2),
+                ),
+                errorBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(10),
+                  borderSide: const BorderSide(color: primaryColor, width: 2),
+                ),
+                focusedErrorBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(10),
+                  borderSide: const BorderSide(color: primaryColor, width: 2),
+                ),
+                fillColor: white,
+                filled: true,
+              ),
+            ),
+            const SizedBox(height: 10),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              // crossAxisAlignment: CrossAxisAlignment.baseline,
+              children: [
+                OutlinedButton(
+                    onPressed: () {
+                      {
+                        updatecname.clear();
+                        updatecdname.clear();
+                        updatedob.clear();
+
+                        updatecmo.clear();
+                        updateemail.clear();
+                      }
+                      // Navigator.pop(context);
+                    },
+                    style: OutlinedButton.styleFrom(
+                        minimumSize: const Size(110, 50),
+                        side: const BorderSide(color: primaryColor, width: 2),
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10))),
+                    child: const Text('Clear',
+                        style: TextStyle(
+                            color: primaryColor,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 14))),
+                const SizedBox(width: 10),
+                OutlinedButton(
+                  onPressed: () {
+                    if (customerController.forms.currentState!.validate()) {
+                      customerController.updatecustomer(
+                        updatecname.text,
+                        updatecdname.text,
+                        updateemail.text,
+                        updatecmo.text,
+                        updatedob.text,
+                        customerController.customerdata[index].id,
+                      );
+
+                      // Navigator.pop(context);
+                    }
+                  },
+                  style: OutlinedButton.styleFrom(
+                      minimumSize: const Size(110, 50),
+                      backgroundColor: primaryColor,
+                      side: const BorderSide(color: primaryColor, width: 2),
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10))),
+                  child: const Text('Update',
+                      style: TextStyle(
+                          color: Colors.white,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 14)),
+                ),
+              ],
+            )
+          ],
+        ),
+      ),
+    ));
   }
 }

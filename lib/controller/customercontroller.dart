@@ -1,8 +1,8 @@
 import 'dart:convert';
 
 import 'package:archive/archive.dart';
+import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
-import 'package:account_center/constant.dart';
 import 'package:account_center/controller/api/apiconnection.dart';
 import 'package:account_center/model/customer.dart';
 import 'package:account_center/view/customers/customers.dart';
@@ -10,7 +10,9 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-class CustomerController {
+import '../constant.dart';
+
+class CustomerController extends GetxController {
   final TextEditingController cname = TextEditingController();
   final TextEditingController cdname = TextEditingController();
   final TextEditingController dob = TextEditingController();
@@ -19,12 +21,22 @@ class CustomerController {
   final TextEditingController email = TextEditingController();
   final TextEditingController search = TextEditingController();
   final forms = GlobalKey<FormState>();
-  List<customer> filteredData = [];
-  List<customer> customerdata = [];
-  bool isSelectAll = false;
-  final List<String> listOfCustomer = [];
 
-  void filterData(String query, Function() refreshParent) {
+  List<customer> filteredData = [];
+  var customerdata = <customer>[].obs;
+  late Rx<ShowCustomerInfo> showCustomerInfo;
+  RxBool isSelectAll = false.obs;
+
+  // @override
+  // void onInit() {
+  //   super.onInit();
+
+  //   showCustomerInfo = ShowCustomerInfo(customerdata).obs;
+  // }
+
+  var listOfCustomer = <String>[].obs;
+
+  void filterData(String query) {
     if (query.isEmpty) {
       filteredData = customerdata;
     } else {
@@ -34,21 +46,20 @@ class CustomerController {
               customer.Email.toLowerCase().contains(query.toLowerCase()))
           .toList();
     }
-    refreshParent();
   }
 
   void clearcustomer(bool selected) {
     listOfCustomer.clear();
     for (var singlecheck in customerdata) {
-      singlecheck.isclick = selected;
+      singlecheck.isclick.value = selected;
     }
   }
 
   checkaddall(bool selected) {
     listOfCustomer.clear();
     for (var singlecheck in customerdata) {
-      singlecheck.isclick = selected;
-      if (singlecheck.isclick) {
+      singlecheck.isclick.value = selected;
+      if (singlecheck.isclick.value) {
         listOfCustomer.add(singlecheck.id);
       } else {
         listOfCustomer.remove(singlecheck.id);
@@ -60,13 +71,13 @@ class CustomerController {
   void addToDeleteList(String id) {
     if (!listOfCustomer.contains(id)) {
       listOfCustomer.add(id);
-      // print(listOfCustomer);
+       print(listOfCustomer);
     }
   }
 
   void removeFromDeleteList(String id) {
     listOfCustomer.remove(id);
-    //print(listOfCustomer);
+    print(listOfCustomer);
   }
 
   Future<void> datetimepicker(BuildContext context) async {
@@ -80,25 +91,28 @@ class CustomerController {
     }
   }
 
-  Future<void> deleteSelectedCustomers(BuildContext context) async {
+  Future<void> deleteSelectedCustomers() async {
     if (listOfCustomer.isEmpty) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('No customers selected for deletion.')),
-      );
+      Get.snackbar(
+          'Customer', ' No customers selected for deletion.',
+          snackPosition: SnackPosition.BOTTOM, 
+         );
       return;
     }
     try {
-      await deleteCustomer(listOfCustomer, context);
+      await deleteCustomer(listOfCustomer);
       listOfCustomer.clear();
-
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-            content: Text('Selected customers deleted successfully!')),
-      );
+ Get.snackbar(
+          'Customer', ' Selected customers deleted successfully!',
+          snackPosition: SnackPosition.BOTTOM, 
+         );
+     
     } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Failed to delete customers.')),
-      );
+       Get.snackbar(
+          'Customer', ' Failed to delete customers.',
+          snackPosition: SnackPosition.BOTTOM, 
+         );
+      
     }
   }
 
@@ -128,14 +142,17 @@ class CustomerController {
   Api api = Api();
   Future<void> fetchlist() async {
     try {
-      List<customer> fetcheddetails = await api.apiconnection();
-
-      customerdata = fetcheddetails;
-      filteredData = customerdata;
-      print('object');
-      for (var customer in customerdata) {
-        print(customer.clabel);
-      }
+      var response = await api.apiconnection();
+      Map<String, dynamic> jsonData = json.decode(response);
+      List<dynamic> dataList = jsonData['data'];
+      customerdata.value = dataList.map((json) {
+        return customer.fromJson(json);
+      }).toList();
+      // filteredData = customerdata;
+      // print('object');
+      // for (var customer in customerdata) {
+      //   print(customer.clabel);
+      // }
     } catch (e) {
       print('Error fetching products: $e');
     }
@@ -148,7 +165,7 @@ class CustomerController {
   }
 
   Future<void> addcustomers(String cname, String cdname, String email,
-      String Cmobile, String DOB, BuildContext context) async {
+      String Cmobile, String DOB) async {
     var token = await getToken();
     try {
       Uri url = Uri.parse('$dev/customer/add');
@@ -169,24 +186,29 @@ class CustomerController {
         },
         body: body,
       );
-
+      // print(body);
       // print(response.body);
       // print(response.statusCode);
       if (response.statusCode == 200) {
-        ScaffoldMessenger.of(context)
-            .showSnackBar(const SnackBar(content: Text('send Sucessfull')));
+        Get.snackbar(
+          'Customer', ' Added Successfull',
+          snackPosition: SnackPosition.BOTTOM, 
+        );
+
         await customerController.fetchlist();
       } else {
-        ScaffoldMessenger.of(context)
-            .showSnackBar(const SnackBar(content: Text('Send failed')));
+        Get.snackbar(
+          'Customer', ' Added Failed',
+          snackPosition: SnackPosition.BOTTOM, // Position
+        );
       }
     } catch (e) {
-      print("agent_error: $e");
+      print("Add Customer Error: $e");
     }
   }
 
-  Future<void> update(String cname, String cdname, String email, String cmo,
-      String dob, String id, BuildContext context) async {
+  Future<void> updatecustomer(String cname, String cdname, String email,
+      String cmo, String dob, String id ) async {
     var token = await getToken();
     try {
       Uri url = Uri.parse('$dev/customer/update');
@@ -208,25 +230,31 @@ class CustomerController {
         },
         body: body,
       );
-      print(body);
+      //  print(body);
+      // print(response.body);
+      // print(response.statusCode);
 
       if (response.statusCode == 200) {
-        ScaffoldMessenger.of(context)
-            .showSnackBar(const SnackBar(content: Text('Update Sucessfull')));
+        Get.snackbar(
+          'Customer', ' Updated Successfull',
+          snackPosition: SnackPosition.BOTTOM, 
+        );
         await customerController.fetchlist();
       } else {
-        ScaffoldMessenger.of(context)
-            .showSnackBar(const SnackBar(content: Text('Update failed')));
+        Get.snackbar(
+          'Customer', ' Update Failed',
+          snackPosition: SnackPosition.BOTTOM, 
+        );
       }
     } catch (e) {
-      print("agent_error: $e");
+      print("Update Customer Error: $e");
     }
   }
 
-  Future<void> deleteCustomer(List<String> id, BuildContext context) async {
+  Future<void> deleteCustomer(List<String> id) async {
     var token = await getToken();
     try {
-      Uri url = Uri.parse('$dev/customer/delete');
+      Uri url = Uri.parse('$dev/customer/deletes');
       // var data = {
       //   "id": id,
       // };
@@ -244,21 +272,31 @@ class CustomerController {
         },
         body: body,
       );
-//  print(body);
-//  print(response.statusCode);
+ print(body);
+      print(response.body);
+      print(response.statusCode);
       if (response.statusCode == 200) {
-        ScaffoldMessenger.of(context)
-            .showSnackBar(const SnackBar(content: Text('Delete Sucessfull')));
-        await fetchlist();
+        Get.snackbar(
+          'Customer',
+          ' Delete Successfull',
+          snackPosition: SnackPosition.BOTTOM,
+        );
+        await customerController.fetchlist();
       } else if (response.statusCode == 500) {
-        ScaffoldMessenger.of(context)
-            .showSnackBar(const SnackBar(content: Text('error')));
+        Get.snackbar(
+          'Customer',
+          ' Error',
+          snackPosition: SnackPosition.BOTTOM,
+        );
       } else {
-        ScaffoldMessenger.of(context)
-            .showSnackBar(const SnackBar(content: Text('Send failed')));
+        Get.snackbar(
+          'Customer',
+          ' Delete Failed ',
+          snackPosition: SnackPosition.BOTTOM,
+        );
       }
     } catch (e) {
-      print("agent_error: $e");
+      print("Delete Customer Error: $e");
     }
   }
 }

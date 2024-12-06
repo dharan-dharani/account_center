@@ -1,4 +1,4 @@
-
+import 'package:get/get.dart';
 class customer {
 
   final String CName;
@@ -7,7 +7,7 @@ class customer {
   final String? Code;
   final String CMobile;
   final String Email;
-  bool isclick;
+  RxBool isclick;
   final String id;
   final List? clabel;
   customer({
@@ -17,10 +17,10 @@ class customer {
     this.Code = '91',
     required this.CMobile,
     required this.Email,
-    this.isclick = false,
+     bool isclick = false,
     required this.id,
     this.clabel,
-  });
+  }): isclick = isclick.obs;
 
   factory customer.fromJson(Map<String?, dynamic> json) {
     return customer(
