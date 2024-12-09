@@ -1,4 +1,4 @@
-import 'package:account_center/masfob.dart';
+import 'package:account_center/views/masfob_view.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 

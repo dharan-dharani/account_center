@@ -1,6 +1,6 @@
 import 'package:account_center/constant.dart';
-import 'package:account_center/login.dart';
-import 'package:account_center/register.dart';
+import 'package:account_center/views/login_view.dart';
+import 'package:account_center/views/register_view.dart';
 import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:flutter/material.dart';
 

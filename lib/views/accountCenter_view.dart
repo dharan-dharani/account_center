@@ -1,13 +1,13 @@
 import 'package:account_center/constant.dart';
-import 'package:account_center/view/agent/agent.dart';
-import 'package:account_center/view/apps/apps.dart';
-import 'package:account_center/view/billing/billing.dart';
-import 'package:account_center/view/customers/customers.dart';
-import 'package:account_center/view/files/files.dart';
-import 'package:account_center/view/integration/integration.dart';
-import 'package:account_center/view/myplan/myplan.dart';
-import 'package:account_center/view/paymentsdetails/paymentdetails.dart';
-import 'package:account_center/view/plan/plan.dart';
+import 'package:account_center/views/agent/agent_view.dart';
+import 'package:account_center/views/apps/apps_view.dart';
+import 'package:account_center/views/billing/billing_view.dart';
+import 'package:account_center/views/customers/customer_view.dart';
+import 'package:account_center/views/files/files_view.dart';
+import 'package:account_center/views/integration/integration_view.dart';
+import 'package:account_center/views/myplan/myplan_view.dart';
+import 'package:account_center/views/paymentsdetails/paymentdetail_view.dart';
+import 'package:account_center/views/plan/plan_view.dart';
 import 'package:flutter/material.dart';
 
 class Accountcenter extends StatefulWidget {
@@ -63,7 +63,13 @@ class _AccountcenterState extends State<Accountcenter> {
       body: Container(
         decoration: const BoxDecoration(
           gradient: LinearGradient(
-            colors: [Color.fromARGB(255, 184, 188, 233), white],
+            colors: [
+              Colors.transparent,
+
+              //Color.fromARGB(255, 184, 188, 233),
+
+              white
+            ],
             begin: Alignment.centerRight,
             end: Alignment.topRight,
           ),

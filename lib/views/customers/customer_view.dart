@@ -1,7 +1,7 @@
 import 'package:account_center/constant.dart';
-import 'package:account_center/controller/api/api_connection.dart';
-import 'package:account_center/controller/customer_controller.dart';
-import 'package:account_center/model/customer.dart';
+import 'package:account_center/controllers/api/api_controller.dart';
+import 'package:account_center/controllers/customer_controller.dart';
+import 'package:account_center/models/customer_model.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
@@ -20,86 +20,78 @@ class CustomerState extends State<Customers> {
   @override
   void initState() {
     super.initState();
-    customerController.filteredData = customerController.customerdata;
-    //listcontroller.filteredlabellist = listcontroller.chipslist;
+    customerController.filteredData.value = customerController.customerdata;
     customerController.fetchlist();
-    //listcontroller.fetchlabellist();
+    customerController.fetchlabellist();
   }
 
   @override
   Widget build(BuildContext context) {
     chips() {
-      return showDialog(
-          context: context,
-          builder: (BuildContext context) =>
-              StatefulBuilder(builder: (context, setState) {
-                return AlertDialog(
-                  title: const Text('Select List'),
-                  content: Padding(
-                    padding: const EdgeInsets.all(12.0),
-                    child: Wrap(
-                      spacing: 8.0,
-                      runSpacing: 8.0,
-                      children: customerController.chipslist.map((chip) {
-                        return FilterChip(
-                          label: Text(chip.chipname),
-                          selected: chip.chipselect,
-                          onSelected: (bool value) {
-                            setState(() {
-                              chip.chipselect = value;
-                              if (chip.chipselect) {
-                                customerController.addassignlist(chip.chipname);
-                              } else {
-                                customerController.removeassignlist(chip.chipname);
-                              }
-                            });
-                          },
-                        );
-                      }).toList(),
-                    ),
-                  ),
-                  actions: [
-                    Row(
-                      children: [
-                        OutlinedButton(
-                            onPressed: () {},
-                            style: OutlinedButton.styleFrom(
-                                minimumSize: const Size(110, 50),
-                                side: const BorderSide(
-                                    color: primaryColor, width: 2),
-                                shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(10))),
-                            child: const Text('Cancel',
-                                style: TextStyle(
-                                    color: primaryColor,
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 14))),
-                        const SizedBox(width: 10),
-                        OutlinedButton(
-                            onPressed: () {
-                              customerController.assignlistlabel(context).then((_) {
-                                setState(() {});
-                              });
-
-                              Navigator.pop(context);
-                            },
-                            style: OutlinedButton.styleFrom(
-                                minimumSize: const Size(110, 50),
-                                backgroundColor: primaryColor,
-                                side: const BorderSide(
-                                    color: primaryColor, width: 2),
-                                shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(10))),
-                            child: const Text('Assign',
-                                style: TextStyle(
-                                    color: Colors.white,
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 14))),
-                      ],
-                    )
-                  ],
+      return Get.dialog(
+        AlertDialog(
+          title: const Text('Select List'),
+          content: Padding(
+            padding: const EdgeInsets.all(12.0),
+            child: Wrap(
+              spacing: 8.0,
+              runSpacing: 8.0,
+              children: customerController.chipslist.map((chip) {
+                return Obx(
+                  () {
+                    return FilterChip(
+                      label: Text(chip.chipname),
+                      selected: chip.chipselect.value,
+                      onSelected: (bool value) {
+                        chip.chipselect.value = value;
+                        if (chip.chipselect.value) {
+                          customerController.addassignlist(chip.chipname);
+                        } else {
+                          customerController.removeassignlist(chip.chipname);
+                        }
+                      },
+                    );
+                  },
                 );
-              }));
+              }).toList(),
+            ),
+          ),
+          actions: [
+            Row(
+              children: [
+                OutlinedButton(
+                    onPressed: () {},
+                    style: OutlinedButton.styleFrom(
+                        minimumSize: const Size(110, 50),
+                        side: const BorderSide(color: primaryColor, width: 2),
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10))),
+                    child: const Text('Cancel',
+                        style: TextStyle(
+                            color: primaryColor,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 14))),
+                const SizedBox(width: 10),
+                OutlinedButton(
+                    onPressed: () {
+                      customerController.assignlistlabel();
+                    },
+                    style: OutlinedButton.styleFrom(
+                        minimumSize: const Size(110, 50),
+                        backgroundColor: primaryColor,
+                        side: const BorderSide(color: primaryColor, width: 2),
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10))),
+                    child: const Text('Assign',
+                        style: TextStyle(
+                            color: Colors.white,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 14))),
+              ],
+            )
+          ],
+        ),
+      );
     }
 
     return Row(
@@ -114,122 +106,124 @@ class CustomerState extends State<Customers> {
                   color: Colors.white, borderRadius: BorderRadius.circular(5)),
               child: Column(
                 children: [
-                  Padding(
-                    padding: const EdgeInsets.all(12.0),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Row(
+                  Obx(
+                    () {
+                      return Padding(
+                        padding: const EdgeInsets.all(12.0),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            customerController.listOfCustomer.isEmpty
-                                ? const Icon(Icons.person, size: 30)
-                                : Text(
-                                    '${customerController.listOfCustomer.length}',
-                                    style: const TextStyle(
-                                        color: Colors.black,
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: 25),
-                                  ),
-                            Text(
-                              customerController.listOfCustomer.isNotEmpty
-                                  ? '  Item Selected'
-                                  : 'Customers',
-                              style: const TextStyle(
-                                  color: Colors.black,
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 25),
+                            Row(
+                              children: [
+                                customerController.listOfCustomer.isEmpty
+                                    ? const Icon(Icons.person, size: 30)
+                                    : Text(
+                                        '${customerController.listOfCustomer.length}',
+                                        style: const TextStyle(
+                                            color: Colors.black,
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: 25),
+                                      ),
+                                Text(
+                                  customerController.listOfCustomer.isNotEmpty
+                                      ? '  Item Selected'
+                                      : 'Customers',
+                                  style: const TextStyle(
+                                      color: Colors.black,
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 25),
+                                ),
+                              ],
                             ),
+                            SizedBox(
+                              width: 300,
+                              height: 40,
+                              child: TextFormField(
+                                controller: customerController.search,
+                                decoration: InputDecoration(
+                                  fillColor: white,
+                                  filled: true,
+                                  hintText: 'Search',
+                                  prefixIcon: const Icon(Icons.search),
+                                  suffixIcon: IconButton(
+                                      onPressed: () {
+                                        customerController.search.clear();
+
+                                        customerController.filterData('');
+                                      },
+                                      icon: const Icon(Icons.close)),
+                                  contentPadding: const EdgeInsets.symmetric(
+                                      vertical: 5, horizontal: 5),
+                                  enabledBorder: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(10),
+                                    borderSide: const BorderSide(
+                                        color: primaryColor, width: 2.0),
+                                  ),
+                                  focusedBorder: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(10),
+                                    borderSide: const BorderSide(
+                                        color: primaryColor, width: 2.0),
+                                  ),
+                                ),
+                                onChanged: (query) {
+                                  customerController.filterData(query);
+                                  print(query);
+                                },
+                              ),
+                            ),
+                            OutlinedButton(
+                                onPressed: () {
+                                  customerController.deleteSelectedCustomers();
+                                },
+                                style: OutlinedButton.styleFrom(
+                                    minimumSize: const Size(110, 50),
+                                    side: const BorderSide(
+                                        color: primaryColor, width: 2),
+                                    shape: RoundedRectangleBorder(
+                                        borderRadius:
+                                            BorderRadius.circular(10))),
+                                child: Text(
+                                    customerController.isSelectAll.value ||
+                                            customerController
+                                                .listOfCustomer.isNotEmpty
+                                        ? 'Delete'
+                                        : 'Import',
+                                    style: const TextStyle(
+                                        color: primaryColor,
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 14))),
+                            OutlinedButton(
+                                onPressed: () {
+                                  if (customerController.isSelectAll.value ||
+                                      customerController
+                                          .listOfCustomer.isNotEmpty) {
+                                    chips();
+                                  } else {
+                                    dialogMethod();
+                                  }
+                                },
+                                style: OutlinedButton.styleFrom(
+                                    minimumSize: const Size(110, 50),
+                                    backgroundColor: primaryColor,
+                                    side: const BorderSide(
+                                        color: primaryColor, width: 2),
+                                    shape: RoundedRectangleBorder(
+                                        borderRadius:
+                                            BorderRadius.circular(10))),
+                                child: Text(
+                                    customerController.isSelectAll.value ||
+                                            customerController
+                                                .listOfCustomer.isNotEmpty
+                                        ? 'Assign'
+                                        : 'Add',
+                                    style: const TextStyle(
+                                        color: Colors.white,
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 14)))
                           ],
                         ),
-                        SizedBox(
-                          width: 300,
-                          height: 40,
-                          child: TextFormField(
-                            controller: customerController.search,
-                            decoration: InputDecoration(
-                              fillColor: white,
-                              filled: true,
-                              hintText: 'Search',
-                              prefixIcon: const Icon(Icons.search),
-                              suffixIcon: IconButton(
-                                  onPressed: () {
-                                    customerController.search.clear();
-                                    setState(() {
-                                      customerController.filterData('');
-                                    });
-                                  },
-                                  icon: const Icon(Icons.close)),
-                              contentPadding: const EdgeInsets.symmetric(
-                                  vertical: 5, horizontal: 5),
-                              enabledBorder: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(10),
-                                borderSide: const BorderSide(
-                                    color: primaryColor, width: 2.0),
-                              ),
-                              focusedBorder: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(10),
-                                borderSide: const BorderSide(
-                                    color: primaryColor, width: 2.0),
-                              ),
-                            ),
-                            onChanged: (query) {
-                              setState(() {
-                                customerController.filterData(query);
-                              });
-                            },
-                          ),
-                        ),
-                        OutlinedButton(
-                            onPressed: () {
-                              customerController.deleteSelectedCustomers();
-                            },
-                            style: OutlinedButton.styleFrom(
-                                minimumSize: const Size(110, 50),
-                                side: const BorderSide(
-                                    color: primaryColor, width: 2),
-                                shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(10))),
-                            child: const Text(
-                                // customerController.isSelectAll.value ||
-                                //         customerController
-                                //             .listOfCustomer.isNotEmpty
-                                //     ? 'Delete'
-                                //     : 'Import',
-                                'Del',
-                                style: TextStyle(
-                                    color: primaryColor,
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 14))),
-                        OutlinedButton(
-                            onPressed: () {
-                              if (customerController.isSelectAll.value ||
-                                  customerController
-                                      .listOfCustomer.isNotEmpty) {
-                                chips();
-                              } else {
-                                dialogMethod();
-                                // Add action
-                              }
-                            },
-                            style: OutlinedButton.styleFrom(
-                                minimumSize: const Size(110, 50),
-                                backgroundColor: primaryColor,
-                                side: const BorderSide(
-                                    color: primaryColor, width: 2),
-                                shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(10))),
-                            child: Text(
-                                customerController.isSelectAll.value ||
-                                        customerController
-                                            .listOfCustomer.isNotEmpty
-                                    ? 'Assign'
-                                    : 'Add',
-                                style: const TextStyle(
-                                    color: Colors.white,
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 14)))
-                      ],
-                    ),
+                      );
+                    },
                   ),
                   Obx(() {
                     if (customerController.customerdata.isEmpty) {
@@ -272,18 +266,16 @@ class CustomerState extends State<Customers> {
                               Checkbox(
                                   value: customerController.isSelectAll.value,
                                   onChanged: (bool? value) {
-                                    setState(() {
-                                      customerController.isSelectAll.value =
-                                          value!;
-                                      customerController.checkaddall(
-                                          customerController.isSelectAll.value);
-                                    });
+                                    customerController.isSelectAll.value =
+                                        value!;
+                                    customerController.checkaddall(
+                                        customerController.isSelectAll.value);
                                   })
                             ],
                           ),
                         )),
                       ],
-                      source: ShowCustomerInfo(customerController.customerdata),
+                      source: ShowCustomerInfo(customerController.filteredData),
                       dataRowMaxHeight: 80,
                       headingRowColor:
                           const WidgetStatePropertyAll(Colors.white),
@@ -321,123 +313,92 @@ class CustomerState extends State<Customers> {
                           ),
                           OutlinedButton(
                               onPressed: () {
-                                showDialog(
-                                    context: context,
-                                    builder: (BuildContext context) =>
-                                        AlertDialog(
-                                          contentPadding:
-                                              const EdgeInsets.symmetric(
-                                                  vertical: 10, horizontal: 20),
-                                          title: const Text('Add a New List'),
-                                          content: Column(
-                                            mainAxisSize: MainAxisSize.min,
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.spaceAround,
-                                            // crossAxisAlignment: CrossAxisAlignment.start,
-                                            children: [
-                                              TextFormField(
-                                                controller: customerController.list,
-                                                decoration: InputDecoration(
-                                                  fillColor: white,
-                                                  filled: true,
-                                                  labelText: 'List Name',
-                                                  labelStyle:
-                                                      const TextStyle(color: black),
-                                                  enabledBorder:
-                                                      OutlineInputBorder(
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            10),
-                                                    borderSide:
-                                                        const BorderSide(
-                                                            color: primaryColor,
-                                                            width: 2),
-                                                  ),
-                                                  focusedBorder:
-                                                      OutlineInputBorder(
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            10),
-                                                    borderSide:
-                                                        const BorderSide(
-                                                            color: primaryColor,
-                                                            width: 2.0),
-                                                  ),
-                                                ),
-                                              ),
-                                              const SizedBox(height: 10),
-                                              Row(
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment.end,
-                                                // crossAxisAlignment: CrossAxisAlignment.baseline,
-                                                children: [
-                                                  OutlinedButton(
-                                                      onPressed: () {},
-                                                      style: OutlinedButton.styleFrom(
-                                                          minimumSize: const Size(
-                                                              110,
-                                                              50),
-                                                          side: const BorderSide(
-                                                              color:
-                                                                  primaryColor,
-                                                              width: 2),
-                                                          shape: RoundedRectangleBorder(
-                                                              borderRadius:
-                                                                  BorderRadius
-                                                                      .circular(
-                                                                          10))),
-                                                      child: const Text(
-                                                          'Cancel',
-                                                          style: TextStyle(
-                                                              color:
-                                                                  primaryColor,
-                                                              fontWeight:
-                                                                  FontWeight
-                                                                      .bold,
-                                                              fontSize: 14))),
-                                                  const SizedBox(width: 10),
-                                                  OutlinedButton(
-                                                      onPressed: () {
-                                                        customerController
-                                                            .addlistlabel(
-                                                                customerController
-                                                                    .list.text,
-                                                                context)
-                                                            .then((_) {
-                                                          setState(() {});
-                                                        });
-
-                                                        Navigator.pop(context);
-                                                      },
-                                                      style: OutlinedButton.styleFrom(
-                                                          minimumSize: const Size(
-                                                              110, 50),
-                                                          backgroundColor:
-                                                              primaryColor,
-                                                          side: const BorderSide(
-                                                              color:
-                                                                  primaryColor,
-                                                              width: 2),
-                                                          shape: RoundedRectangleBorder(
-                                                              borderRadius:
-                                                                  BorderRadius
-                                                                      .circular(
-                                                                          10))),
-                                                      child: const Text(
-                                                          'Add List',
-                                                          style:
-                                                              TextStyle(
-                                                                  color: Colors
-                                                                      .white,
-                                                                  fontWeight:
-                                                                      FontWeight
-                                                                          .bold,
-                                                                  fontSize: 14))),
-                                                ],
-                                              )
-                                            ],
+                                Get.dialog(AlertDialog(
+                                  contentPadding: const EdgeInsets.symmetric(
+                                      vertical: 10, horizontal: 20),
+                                  title: const Text('Add a New List'),
+                                  content: Column(
+                                    mainAxisSize: MainAxisSize.min,
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceAround,
+                                    // crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: [
+                                      TextFormField(
+                                        controller: customerController.list,
+                                        decoration: InputDecoration(
+                                          fillColor: white,
+                                          filled: true,
+                                          labelText: 'List Name',
+                                          labelStyle:
+                                              const TextStyle(color: black),
+                                          enabledBorder: OutlineInputBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(10),
+                                            borderSide: const BorderSide(
+                                                color: primaryColor, width: 2),
                                           ),
-                                        ));
+                                          focusedBorder: OutlineInputBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(10),
+                                            borderSide: const BorderSide(
+                                                color: primaryColor,
+                                                width: 2.0),
+                                          ),
+                                        ),
+                                      ),
+                                      const SizedBox(height: 10),
+                                      Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.end,
+                                        // crossAxisAlignment: CrossAxisAlignment.baseline,
+                                        children: [
+                                          OutlinedButton(
+                                              onPressed: () {},
+                                              style: OutlinedButton.styleFrom(
+                                                  minimumSize:
+                                                      const Size(110, 50),
+                                                  side: const BorderSide(
+                                                      color: primaryColor,
+                                                      width: 2),
+                                                  shape: RoundedRectangleBorder(
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              10))),
+                                              child: const Text('Cancel',
+                                                  style: TextStyle(
+                                                      color: primaryColor,
+                                                      fontWeight:
+                                                          FontWeight.bold,
+                                                      fontSize: 14))),
+                                          const SizedBox(width: 10),
+                                          OutlinedButton(
+                                              onPressed: () {
+                                                customerController.addlistlabel(
+                                                    customerController
+                                                        .list.text);
+                                              },
+                                              style: OutlinedButton.styleFrom(
+                                                  minimumSize:
+                                                      const Size(110, 50),
+                                                  backgroundColor: primaryColor,
+                                                  side: const BorderSide(
+                                                      color: primaryColor,
+                                                      width: 2),
+                                                  shape: RoundedRectangleBorder(
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              10))),
+                                              child: const Text('Add List',
+                                                  style: TextStyle(
+                                                      color: Colors.white,
+                                                      fontWeight:
+                                                          FontWeight.bold,
+                                                      fontSize: 14))),
+                                        ],
+                                      )
+                                    ],
+                                  ),
+                                ));
                               },
                               style: OutlinedButton.styleFrom(
                                   minimumSize: const Size(80, 40),
@@ -480,56 +441,55 @@ class CustomerState extends State<Customers> {
                         ),
                       ),
                     ),
-                    Expanded(
-                      child: ListView.builder(
-                          itemCount: customerController.chipslist.length,
-                          itemBuilder: (context, index) {
-                            return Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: Container(
-                                decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(8),
-                                    color: Colors.white,
-                                    boxShadow: [
-                                      BoxShadow(
-                                        color: Colors.grey.withOpacity(0.2),
-                                        blurRadius: 5,
-                                        offset: const Offset(0, 3),
-                                      ),
-                                    ]),
-                                height: 60,
-                                width: 220,
-                                child: ListTile(
-                                  leading: const CircleAvatar(
-                                    backgroundColor: primaryColor,
-                                    maxRadius: 20,
-                                  ),
-                                  title: Text(
-                                      customerController.chipslist[index].chipname),
-                                  subtitle: const Text(
-                                    '(0) Contacts',
-                                    style: TextStyle(
-                                        color: Colors.grey, fontSize: 12),
-                                  ),
-                                  trailing: InkWell(
-                                    onTap: () {
-                                      customerController
-                                          .deleteListlabel(
-                                              customerController
-                                                  .chipslist[index].chipname,
-                                              context)
-                                          .then((_) {
-                                        setState(() {});
-                                      });
-                                    },
-                                    child: const Icon(
-                                        Icons.delete_outline_outlined),
+                    Expanded(child: Obx(
+                      () {
+                        return ListView.builder(
+                            itemCount: customerController.chipslist.length,
+                            itemBuilder: (context, index) {
+                              print(customerController.chipslist.length);
+
+                              return Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Container(
+                                  decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(8),
+                                      color: Colors.white,
+                                      boxShadow: [
+                                        BoxShadow(
+                                          color: Colors.grey.withOpacity(0.2),
+                                          blurRadius: 5,
+                                          offset: const Offset(0, 3),
+                                        ),
+                                      ]),
+                                  height: 60,
+                                  width: 220,
+                                  child: ListTile(
+                                    leading: const CircleAvatar(
+                                      backgroundColor: primaryColor,
+                                      maxRadius: 20,
+                                    ),
+                                    title: Text(customerController
+                                        .chipslist[index].chipname),
+                                    subtitle: const Text(
+                                      '(0) Contacts',
+                                      style: TextStyle(
+                                          color: Colors.grey, fontSize: 12),
+                                    ),
+                                    trailing: InkWell(
+                                      onTap: () {
+                                        customerController.deleteListlabel(
+                                            customerController
+                                                .chipslist[index].chipname);
+                                      },
+                                      child: const Icon(
+                                          Icons.delete_outline_outlined),
+                                    ),
                                   ),
                                 ),
-                              ),
-                            );
-                          }),
-                    )
+                              );
+                            });
+                      },
+                    ))
                   ],
                 ),
               ),

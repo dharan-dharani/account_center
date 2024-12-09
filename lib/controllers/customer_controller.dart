@@ -2,15 +2,15 @@ import 'dart:convert';
 import 'package:archive/archive.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
-import 'package:account_center/controller/api/api_connection.dart';
-import 'package:account_center/model/customer.dart';
-import 'package:account_center/view/customers/customers.dart';
+import 'package:account_center/controllers/api/api_controller.dart';
+import 'package:account_center/models/customer_model.dart';
+import 'package:account_center/views/customers/customer_view.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../constant.dart';
-import '../login.dart';
-import '../model/chiplist.dart';
+import '../views/login_view.dart';
+import '../models/label_model.dart';
 
 class CustomerController extends GetxController {
   final TextEditingController cname = TextEditingController();
@@ -24,21 +24,21 @@ class CustomerController extends GetxController {
   final TextEditingController searchlist = TextEditingController();
   final forms = GlobalKey<FormState>();
 
-  List<customer> filteredData = [];
   var customerdata = <customer>[].obs;
+  var chipslist = <Chiplist>[].obs;
+
   late Rx<ShowCustomerInfo> showCustomerInfo;
   RxBool isSelectAll = false.obs;
 
-   List<Chiplist> filteredlabellist = [];
+  var filteredData = <customer>[].obs;
+  var filteredlabellist = <Chiplist>[].obs;
 
-  List<String> selectedlabel = [];
-  var  chipslist =<Chiplist> [].obs;
-
+  var selectedlabel = <String>[].obs;
   var listOfCustomer = <String>[].obs;
 
-// Date Picker 
+// Date Picker
 
- Future<void> datetimepicker(BuildContext context) async {
+  Future<void> datetimepicker(BuildContext context) async {
     final DateTime? select = await showDatePicker(
         context: context,
         initialDate: DateTime.now(),
@@ -53,9 +53,9 @@ class CustomerController extends GetxController {
 
   void filterData(String query) {
     if (query.isEmpty) {
-      filteredData = customerdata;
+      filteredData.value = customerdata;
     } else {
-      filteredData = customerdata
+      filteredData.value = customerdata
           .where((customer) =>
               customer.CName.toLowerCase().contains(query.toLowerCase()) ||
               customer.Email.toLowerCase().contains(query.toLowerCase()))
@@ -63,7 +63,7 @@ class CustomerController extends GetxController {
     }
   }
 
-//label assign clear 
+//label assign clear
 
   void clearcustomer(bool selected) {
     listOfCustomer.clear();
@@ -92,7 +92,7 @@ class CustomerController extends GetxController {
   void addToDeleteList(String id) {
     if (!listOfCustomer.contains(id)) {
       listOfCustomer.add(id);
-       print(listOfCustomer);
+      print(listOfCustomer);
     }
   }
 
@@ -104,35 +104,36 @@ class CustomerController extends GetxController {
   }
 
 // selected option delete
- 
+
   Future<void> deleteSelectedCustomers() async {
     if (listOfCustomer.isEmpty) {
       Get.snackbar(
-          'Customer', ' No customers selected for deletion.',
-          snackPosition: SnackPosition.BOTTOM, 
-         );
+        'Customer',
+        ' No customers selected for deletion.',
+        snackPosition: SnackPosition.BOTTOM,
+      );
       return;
     }
     try {
       await deleteCustomer(listOfCustomer);
       listOfCustomer.clear();
- Get.snackbar(
-          'Customer', ' Selected customers deleted successfully!',
-          snackPosition: SnackPosition.BOTTOM, 
-         );
-     
+      Get.snackbar(
+        'Customer',
+        ' Selected customers deleted successfully!',
+        snackPosition: SnackPosition.BOTTOM,
+      );
     } catch (e) {
-       Get.snackbar(
-          'Customer', ' Failed to delete customers.',
-          snackPosition: SnackPosition.BOTTOM, 
-         );
-      
+      Get.snackbar(
+        'Customer',
+        ' Failed to delete customers.',
+        snackPosition: SnackPosition.BOTTOM,
+      );
     }
   }
 
 // Add label
 
-addassignlist(String name) {
+  addassignlist(String name) {
     if (!selectedlabel.contains(name)) {
       selectedlabel.add(name);
     }
@@ -150,17 +151,17 @@ addassignlist(String name) {
 
 // filter label
 
-  void filterDatalist(String query, Function() refreshParent) {
-    if (query.isEmpty) {
-      filteredlabellist = chipslist;
-    } else {
-      filteredlabellist = chipslist
-          .where((list) =>
-              list.chipname.toLowerCase().contains(query.toLowerCase()))
-          .toList();
-    }
-    refreshParent();
-  }
+  // void filterDatalist(String query, Function() refreshParent) {
+  //   if (query.isEmpty) {
+  //     filteredlabellist. = chipslist;
+  //   } else {
+  //     filteredlabellist = chipslist
+  //         .where((list) =>
+  //             list.chipname.toLowerCase().contains(query.toLowerCase()))
+  //         .toList();
+  //   }
+  //   refreshParent();
+  // }
 // Compresser & Decompressor
 
   customerDecompresser({data}) {
@@ -208,12 +209,16 @@ addassignlist(String name) {
       var response = await api.labellists();
       Map<String, dynamic> jsonData = json.decode(response);
       List<dynamic> dataList = jsonData['labels'];
-      chipslist.value=dataList.map((json) => Chiplist(chipname: json)).toList();
+      chipslist.value = dataList.map((json) {
+        //print(json);
+        return Chiplist(chipname: json);
+      }).toList();
+      // print(chipslist);
     } catch (e) {
       print('Error fetching labels: $e');
     }
   }
-  
+
 // Get Token
 
   Future<String?> getToken() async {
@@ -251,8 +256,9 @@ addassignlist(String name) {
       // print(response.statusCode);
       if (response.statusCode == 200) {
         Get.snackbar(
-          'Customer', ' Added Successfull',
-          snackPosition: SnackPosition.BOTTOM, 
+          'Customer',
+          ' Added Successfull',
+          snackPosition: SnackPosition.BOTTOM,
         );
 
         await customerController.fetchlist();
@@ -269,9 +275,9 @@ addassignlist(String name) {
 
 // Label Add
 
-Future<void> addlistlabel(String id, BuildContext context) async {
+  Future<void> addlistlabel(String id) async {
     var token = await userController.getToken();
-    print(token);
+    //print(token);
     try {
       Uri url = Uri.parse('$dev/label/add');
       var data = {
@@ -287,16 +293,32 @@ Future<void> addlistlabel(String id, BuildContext context) async {
         },
         body: body,
       );
-
+      // print(body);
       // print(response.body);
       // print(response.statusCode);
       if (response.statusCode == 200) {
-        ScaffoldMessenger.of(context)
-            .showSnackBar(const SnackBar(content: Text('send Sucessfull')));
+        Get.snackbar(
+          "Label",
+          " Added Successfully",
+          snackPosition: SnackPosition.BOTTOM,
+          backgroundColor: Colors.black,
+          maxWidth: 600,
+          margin: EdgeInsets.all(10),
+          borderRadius: 8,
+          colorText: Colors.white,
+        );
         await customerController.fetchlabellist();
       } else {
-        ScaffoldMessenger.of(context)
-            .showSnackBar(const SnackBar(content: Text('Send failed')));
+        Get.snackbar(
+          "Label",
+          " Added Failed",
+          snackPosition: SnackPosition.BOTTOM,
+          backgroundColor: Colors.black,
+          maxWidth: 600,
+          margin: EdgeInsets.all(10),
+          borderRadius: 8,
+          colorText: Colors.white,
+        );
       }
     } catch (e) {
       print("label add error: $e");
@@ -306,7 +328,7 @@ Future<void> addlistlabel(String id, BuildContext context) async {
 // Customer Update
 
   Future<void> updatecustomer(String cname, String cdname, String email,
-      String cmo, String dob, String id ) async {
+      String cmo, String dob, String id) async {
     var token = await getToken();
     try {
       Uri url = Uri.parse('$dev/customer/update');
@@ -334,14 +356,16 @@ Future<void> addlistlabel(String id, BuildContext context) async {
 
       if (response.statusCode == 200) {
         Get.snackbar(
-          'Customer', ' Updated Successfull',
-          snackPosition: SnackPosition.BOTTOM, 
+          'Customer',
+          ' Updated Successfull',
+          snackPosition: SnackPosition.BOTTOM,
         );
         await customerController.fetchlist();
       } else {
         Get.snackbar(
-          'Customer', ' Update Failed',
-          snackPosition: SnackPosition.BOTTOM, 
+          'Customer',
+          ' Update Failed',
+          snackPosition: SnackPosition.BOTTOM,
         );
       }
     } catch (e) {
@@ -351,17 +375,17 @@ Future<void> addlistlabel(String id, BuildContext context) async {
 
 // Label Assign
 
-Future<void> assignlistlabel(BuildContext context) async {
+  Future<void> assignlistlabel() async {
     var token = await userController.getToken();
 
     var id = customerController.listOfCustomer;
 
     Map<String, dynamic> listoflabels = {'ids': id};
-    print(listoflabels);
+    //print(listoflabels);
     var listoflabelsEncode = jsonEncode(listoflabels);
 
     var encodedlabel = customerCompresser(data: listoflabelsEncode.toString());
-    print(encodedlabel);
+    //print(encodedlabel);
     try {
       Uri url = Uri.parse('$dev/label/assign');
       // var data = {
@@ -388,13 +412,29 @@ Future<void> assignlistlabel(BuildContext context) async {
 
       print(response.statusCode);
       if (response.statusCode == 200) {
-        ScaffoldMessenger.of(context)
-            .showSnackBar(const SnackBar(content: Text('send Sucessfull')));
+        Get.snackbar(
+          "Label",
+          " Assign Successfully",
+          snackPosition: SnackPosition.BOTTOM,
+          backgroundColor: Colors.black,
+          maxWidth: 600,
+          margin: EdgeInsets.all(10),
+          borderRadius: 8,
+          colorText: Colors.white,
+        );
         customerController.clearcustomer(false);
         await customerController.fetchlist();
       } else {
-        ScaffoldMessenger.of(context)
-            .showSnackBar(const SnackBar(content: Text('Send failed')));
+        Get.snackbar(
+          "Label",
+          " Assign Failed",
+          snackPosition: SnackPosition.BOTTOM,
+          backgroundColor: Colors.black,
+          maxWidth: 600,
+          margin: EdgeInsets.all(10),
+          borderRadius: 8,
+          colorText: Colors.white,
+        );
       }
     } catch (e) {
       print("agent_error: $e");
@@ -424,7 +464,7 @@ Future<void> assignlistlabel(BuildContext context) async {
         },
         body: body,
       );
- print(body);
+      print(body);
       print(response.body);
       print(response.statusCode);
       if (response.statusCode == 200) {
@@ -451,12 +491,12 @@ Future<void> assignlistlabel(BuildContext context) async {
       print("Delete Customer Error: $e");
     }
   }
- 
+
 // Label Delete
 
-  Future<void> deleteListlabel(String chipname, BuildContext context) async {
+  Future<void> deleteListlabel(String chipname) async {
     var token = await userController.getToken();
-    print(token);
+    //print(token);
     try {
       Uri url = Uri.parse('$dev/label/delete');
       var data = {
@@ -472,25 +512,46 @@ Future<void> assignlistlabel(BuildContext context) async {
         },
         body: body,
       );
-      // print(body);
-      // print(response.body);
-      // print(response.statusCode);
+      print(body);
+      print(response.body);
+      print(response.statusCode);
       if (response.statusCode == 200) {
-        ScaffoldMessenger.of(context)
-            .showSnackBar(const SnackBar(content: Text('Delete Sucessfull')));
+        Get.snackbar(
+          "Label",
+          " Delete Successfully",
+          snackPosition: SnackPosition.BOTTOM,
+          backgroundColor: Colors.black,
+          maxWidth: 600,
+          margin: EdgeInsets.all(10),
+          borderRadius: 8,
+          colorText: Colors.white,
+        );
         await customerController.fetchlabellist();
       } else if (response.statusCode == 500) {
-        ScaffoldMessenger.of(context)
-            .showSnackBar(const SnackBar(content: Text('error')));
+        Get.snackbar(
+          "Label",
+          " Error ",
+          snackPosition: SnackPosition.BOTTOM,
+          backgroundColor: Colors.black,
+          maxWidth: 600,
+          margin: EdgeInsets.all(10),
+          borderRadius: 8,
+          colorText: Colors.white,
+        );
       } else {
-        ScaffoldMessenger.of(context)
-            .showSnackBar(const SnackBar(content: Text('Send failed')));
+        Get.snackbar(
+          "Label",
+          " Delete Failed",
+          snackPosition: SnackPosition.BOTTOM,
+          backgroundColor: Colors.black,
+          maxWidth: 600,
+          margin: EdgeInsets.all(10),
+          borderRadius: 8,
+          colorText: Colors.white,
+        );
       }
     } catch (e) {
       print("label delete error: $e");
     }
   }
-
 }
-
-

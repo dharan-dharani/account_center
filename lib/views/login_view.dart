@@ -1,5 +1,5 @@
 import 'package:account_center/constant.dart';
-import 'package:account_center/controller/user_controller.dart';
+import 'package:account_center/controllers/user_controller.dart';
 import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:flutter/material.dart';
 
@@ -146,8 +146,8 @@ class FormPage extends State<Login> {
                       const SizedBox(height: 20),
                       OutlinedButton(
                           onPressed: () {
-                            userController.login(userController.email.text,
-                                userController.password.text, context);
+                            userController.login(userController.loginemail.text,
+                                userController.loginpassword.text, context);
                           },
                           style: OutlinedButton.styleFrom(
                               minimumSize: const Size(110, 50),

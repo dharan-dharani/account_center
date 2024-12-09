@@ -1,5 +1,5 @@
 import 'package:account_center/constant.dart';
-import 'package:account_center/controller/user_controller.dart';
+import 'package:account_center/controllers/user_controller.dart';
 import 'package:flutter/material.dart';
 
 class Register extends StatefulWidget {

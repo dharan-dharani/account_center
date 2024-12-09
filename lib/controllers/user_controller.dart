@@ -3,13 +3,13 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:account_center/constant.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import '../view/accountCenter.dart';
+import '../views/accountCenter_view.dart';
 
 class UserController {
   final registerformkey = GlobalKey<FormState>();
   final loginformkey = GlobalKey<FormState>();
-  final TextEditingController loginemail =TextEditingController(text: 'dharan123@gmail.com');
-  final TextEditingController loginpassword = TextEditingController(text: '12345');
+  final TextEditingController loginemail = TextEditingController();
+  final TextEditingController loginpassword = TextEditingController();
   final TextEditingController organizationname = TextEditingController();
   final TextEditingController name = TextEditingController();
   final TextEditingController email = TextEditingController();
@@ -25,10 +25,9 @@ class UserController {
   }
 
   //Register route
-  
-  Future<void> register(String organizationname,String name, String email,
-   String mobileno,
-      String password, BuildContext context) async {
+
+  Future<void> register(String organizationname, String name, String email,
+      String mobileno, String password, BuildContext context) async {
     try {
       Uri url = Uri.parse('$dev/user/register');
       var data = {
@@ -37,10 +36,9 @@ class UserController {
         "email": email,
         "contact_number": mobileno,
         "password": password,
-        
       };
 
-      String? body = json.encode(data); 
+      String? body = json.encode(data);
       var response = await http.post(
         url,
         headers: <String, String>{
@@ -49,7 +47,7 @@ class UserController {
         },
         body: body,
       );
-       //print(body);
+      //print(body);
 
       if (response.statusCode == 200) {
         ScaffoldMessenger.of(context)
@@ -63,9 +61,9 @@ class UserController {
     }
   }
 
- // Login route
- 
-Future<void> login(
+  // Login route
+
+  Future<void> login(
       String email, String password, BuildContext context) async {
     try {
       Uri url = Uri.parse('$dev/user/login');
@@ -75,7 +73,7 @@ Future<void> login(
       };
 
       String? body = json.encode(data);
-      // print(body);
+      //print(body);
       var response = await http.post(url,
           headers: <String, String>{
             'Content-Type': 'application/json; charset=UTF-8',
@@ -110,3 +108,4 @@ Future<void> login(
     }
   }
 }
+
