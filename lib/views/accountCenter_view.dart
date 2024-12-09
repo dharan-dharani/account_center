@@ -41,17 +41,17 @@ class _AccountcenterState extends State<Accountcenter> {
           leading: Icon(
             icons,
             size: 25,
-            color: isselect ? primaryColor : Colors.black,
+            color: isselect ? maincolor : Colors.black,
           ),
           title: Text(
             option,
             style: TextStyle(
-                color: isselect ? primaryColor : Colors.black,
+                color: isselect ? maincolor : Colors.black,
                 fontWeight: FontWeight.bold,
                 fontSize: 16),
           ),
           trailing: Icon(Icons.chevron_right,
-              size: 25, color: isselect ? primaryColor : Colors.black),
+              size: 25, color: isselect ? maincolor : Colors.black),
         ),
       );
     });
@@ -62,17 +62,7 @@ class _AccountcenterState extends State<Accountcenter> {
     return Scaffold(
       body: Container(
         decoration: const BoxDecoration(
-          gradient: LinearGradient(
-            colors: [
-              Colors.transparent,
-
-              //Color.fromARGB(255, 184, 188, 233),
-
-              white
-            ],
-            begin: Alignment.centerRight,
-            end: Alignment.topRight,
-          ),
+          color: Color(0xFFFFF7D1),
         ),
         child: Row(
           children: [
@@ -123,7 +113,7 @@ class _AccountcenterState extends State<Accountcenter> {
                               ListTile(
                                 leading: const CircleAvatar(
                                   maxRadius: 20,
-                                  backgroundColor: primaryColor,
+                                  backgroundColor: maincolor,
                                 ),
                                 title: const Text('Organization Name'),
                                 subtitle: const Text('Masfob'),
@@ -146,7 +136,7 @@ class _AccountcenterState extends State<Accountcenter> {
                                         child: const Text(
                                           'Masfob@gmailcom',
                                           style: TextStyle(
-                                            color: primaryColor,
+                                            color: black,
                                             fontWeight: FontWeight.bold,
                                           ),
                                         )),
@@ -161,7 +151,7 @@ class _AccountcenterState extends State<Accountcenter> {
                                         child: const Text(
                                           'Logout',
                                           style: TextStyle(
-                                            color: primaryColor,
+                                            color: black,
                                             fontWeight: FontWeight.bold,
                                           ),
                                         )),

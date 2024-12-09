@@ -27,7 +27,11 @@ class _MasfobState extends State<Masfob> {
               flex: 4,
               child: Container(
                 decoration: const BoxDecoration(
-                    color: primaryColor,
+                    gradient: LinearGradient(
+
+      colors:
+              
+                     [button,button1,maincolor]),
                     borderRadius: BorderRadius.only(
                       topRight: Radius.circular(100),
                     )),

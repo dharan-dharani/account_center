@@ -65,14 +65,14 @@ class CustomerState extends State<Customers> {
                     },
                     style: OutlinedButton.styleFrom(
                         minimumSize: const Size(110, 50),
-                        side: const BorderSide(color: primaryColor, width: 2),
+                        side: const BorderSide(color: button1, width: 2),
                         shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(10))),
                     child: const Text('Cancel',
                         style: TextStyle(
-                            color: primaryColor,
+                            color: black,
                             fontWeight: FontWeight.bold,
-                            fontSize: 14))),
+                            fontSize: 16))),
                 const SizedBox(width: 10),
                 OutlinedButton(
                     onPressed: () {
@@ -81,15 +81,15 @@ class CustomerState extends State<Customers> {
                     },
                     style: OutlinedButton.styleFrom(
                         minimumSize: const Size(110, 50),
-                        backgroundColor: primaryColor,
-                        side: const BorderSide(color: primaryColor, width: 2),
+                        backgroundColor: button1,
+                        side: const BorderSide(color: button1, width: 2),
                         shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(10))),
                     child: const Text('Assign',
                         style: TextStyle(
-                            color: Colors.white,
+                            color: Colors.black,
                             fontWeight: FontWeight.bold,
-                            fontSize: 14))),
+                            fontSize: 16))),
               ],
             )
           ],
@@ -159,12 +159,12 @@ class CustomerState extends State<Customers> {
                                   enabledBorder: OutlineInputBorder(
                                     borderRadius: BorderRadius.circular(10),
                                     borderSide: const BorderSide(
-                                        color: primaryColor, width: 2.0),
+                                        color: black, width: 2.0),
                                   ),
                                   focusedBorder: OutlineInputBorder(
                                     borderRadius: BorderRadius.circular(10),
                                     borderSide: const BorderSide(
-                                        color: primaryColor, width: 2.0),
+                                        color: black, width: 2.0),
                                   ),
                                 ),
                                 onChanged: (value) {
@@ -180,7 +180,7 @@ class CustomerState extends State<Customers> {
                                 style: OutlinedButton.styleFrom(
                                     minimumSize: const Size(110, 50),
                                     side: const BorderSide(
-                                        color: primaryColor, width: 2),
+                                        color: button1, width: 2),
                                     shape: RoundedRectangleBorder(
                                         borderRadius:
                                             BorderRadius.circular(10))),
@@ -191,9 +191,9 @@ class CustomerState extends State<Customers> {
                                         ? 'Delete'
                                         : 'Import',
                                     style: const TextStyle(
-                                        color: primaryColor,
+                                        color: black,
                                         fontWeight: FontWeight.bold,
-                                        fontSize: 14))),
+                                        fontSize: 16))),
                             OutlinedButton(
                                 onPressed: () {
                                   if (customerController.isSelectAll.value ||
@@ -206,9 +206,9 @@ class CustomerState extends State<Customers> {
                                 },
                                 style: OutlinedButton.styleFrom(
                                     minimumSize: const Size(110, 50),
-                                    backgroundColor: primaryColor,
+                                    backgroundColor: button,
                                     side: const BorderSide(
-                                        color: primaryColor, width: 2),
+                                        color: button, width: 2),
                                     shape: RoundedRectangleBorder(
                                         borderRadius:
                                             BorderRadius.circular(10))),
@@ -219,9 +219,9 @@ class CustomerState extends State<Customers> {
                                         ? 'Assign'
                                         : 'Add',
                                     style: const TextStyle(
-                                        color: Colors.white,
+                                        color: Colors.black,
                                         fontWeight: FontWeight.bold,
-                                        fontSize: 14)))
+                                        fontSize: 16)))
                           ],
                         ),
                       );
@@ -337,13 +337,13 @@ class CustomerState extends State<Customers> {
                                             borderRadius:
                                                 BorderRadius.circular(10),
                                             borderSide: const BorderSide(
-                                                color: primaryColor, width: 2),
+                                                color: black, width: 2),
                                           ),
                                           focusedBorder: OutlineInputBorder(
                                             borderRadius:
                                                 BorderRadius.circular(10),
                                             borderSide: const BorderSide(
-                                                color: primaryColor,
+                                                color: black,
                                                 width: 2.0),
                                           ),
                                         ),
@@ -363,7 +363,7 @@ class CustomerState extends State<Customers> {
                                                   minimumSize:
                                                       const Size(110, 50),
                                                   side: const BorderSide(
-                                                      color: primaryColor,
+                                                      color: button1,
                                                       width: 2),
                                                   shape: RoundedRectangleBorder(
                                                       borderRadius:
@@ -371,10 +371,10 @@ class CustomerState extends State<Customers> {
                                                               10))),
                                               child: const Text('Cancel',
                                                   style: TextStyle(
-                                                      color: primaryColor,
+                                                      color: black,
                                                       fontWeight:
                                                           FontWeight.bold,
-                                                      fontSize: 14))),
+                                                      fontSize: 16))),
                                           const SizedBox(width: 10),
                                           OutlinedButton(
                                               onPressed: () {
@@ -386,9 +386,9 @@ class CustomerState extends State<Customers> {
                                               style: OutlinedButton.styleFrom(
                                                   minimumSize:
                                                       const Size(110, 50),
-                                                  backgroundColor: primaryColor,
+                                                  backgroundColor: button1,
                                                   side: const BorderSide(
-                                                      color: primaryColor,
+                                                      color: button1,
                                                       width: 2),
                                                   shape: RoundedRectangleBorder(
                                                       borderRadius:
@@ -396,10 +396,10 @@ class CustomerState extends State<Customers> {
                                                               10))),
                                               child: const Text('Add List',
                                                   style: TextStyle(
-                                                      color: Colors.white,
+                                                      color: Colors.black,
                                                       fontWeight:
                                                           FontWeight.bold,
-                                                      fontSize: 14))),
+                                                      fontSize: 16))),
                                         ],
                                       )
                                     ],
@@ -409,14 +409,14 @@ class CustomerState extends State<Customers> {
                               style: OutlinedButton.styleFrom(
                                   minimumSize: const Size(80, 40),
                                   side: const BorderSide(
-                                      color: primaryColor, width: 2),
+                                      color: button, width: 2),
                                   shape: RoundedRectangleBorder(
                                       borderRadius: BorderRadius.circular(10))),
                               child: const Text('Add List',
                                   style: TextStyle(
-                                      color: primaryColor,
+                                      color: black,
                                       fontWeight: FontWeight.bold,
-                                      fontSize: 14))),
+                                      fontSize: 16))),
                         ],
                       ),
                     ),
@@ -442,12 +442,12 @@ class CustomerState extends State<Customers> {
                           enabledBorder: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(10),
                             borderSide:
-                                const BorderSide(color: primaryColor, width: 2),
+                                const BorderSide(color: black, width: 2),
                           ),
                           focusedBorder: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(10),
                             borderSide: const BorderSide(
-                                color: primaryColor, width: 2.0),
+                                color: black, width: 2.0),
                           ),
                         ),
                         onChanged: (value) {
@@ -478,7 +478,7 @@ class CustomerState extends State<Customers> {
                                   width: 220,
                                   child: ListTile(
                                     leading: const CircleAvatar(
-                                      backgroundColor: primaryColor,
+                                      backgroundColor: maincolor,
                                       maxRadius: 20,
                                     ),
                                     title: Text(customerController
@@ -535,22 +535,22 @@ class CustomerState extends State<Customers> {
                         enabledBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(10),
                           borderSide:
-                              const BorderSide(color: primaryColor, width: 2),
+                              const BorderSide(color: black, width: 2),
                         ),
                         focusedBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(10),
                           borderSide:
-                              const BorderSide(color: primaryColor, width: 2.0),
+                              const BorderSide(color: black, width: 2.0),
                         ),
                         errorBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(10),
                           borderSide:
-                              const BorderSide(color: primaryColor, width: 2),
+                              const BorderSide(color: black, width: 2),
                         ),
                         focusedErrorBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(10),
                           borderSide:
-                              const BorderSide(color: primaryColor, width: 2.0),
+                              const BorderSide(color: black, width: 2.0),
                         ),
                         fillColor: white,
                         filled: true,
@@ -571,22 +571,22 @@ class CustomerState extends State<Customers> {
                         enabledBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(10),
                           borderSide:
-                              const BorderSide(color: primaryColor, width: 2),
+                              const BorderSide(color: black, width: 2),
                         ),
                         focusedBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(10),
                           borderSide:
-                              const BorderSide(color: primaryColor, width: 2.0),
+                              const BorderSide(color: black, width: 2.0),
                         ),
                         errorBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(10),
                           borderSide:
-                              const BorderSide(color: primaryColor, width: 2),
+                              const BorderSide(color: black, width: 2),
                         ),
                         focusedErrorBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(10),
                           borderSide:
-                              const BorderSide(color: primaryColor, width: 2.0),
+                              const BorderSide(color: black, width: 2.0),
                         ),
                         fillColor: white,
                         filled: true,
@@ -616,22 +616,22 @@ class CustomerState extends State<Customers> {
                         enabledBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(10),
                           borderSide:
-                              const BorderSide(color: primaryColor, width: 2),
+                              const BorderSide(color: black, width: 2),
                         ),
                         focusedBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(10),
                           borderSide:
-                              const BorderSide(color: primaryColor, width: 2),
+                              const BorderSide(color: black, width: 2),
                         ),
                         errorBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(10),
                           borderSide:
-                              const BorderSide(color: primaryColor, width: 2),
+                              const BorderSide(color: black, width: 2),
                         ),
                         focusedErrorBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(10),
                           borderSide:
-                              const BorderSide(color: primaryColor, width: 2),
+                              const BorderSide(color: black, width: 2),
                         ),
                         fillColor: white,
                         filled: true,
@@ -655,22 +655,22 @@ class CustomerState extends State<Customers> {
                         enabledBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(10),
                           borderSide:
-                              const BorderSide(color: primaryColor, width: 2),
+                              const BorderSide(color: black, width: 2),
                         ),
                         focusedBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(10),
                           borderSide:
-                              const BorderSide(color: primaryColor, width: 2),
+                              const BorderSide(color: black, width: 2),
                         ),
                         errorBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(10),
                           borderSide:
-                              const BorderSide(color: primaryColor, width: 2),
+                              const BorderSide(color: black, width: 2),
                         ),
                         focusedErrorBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(10),
                           borderSide: const BorderSide(
-                            color: primaryColor,
+                            color: black,
                             width: 2,
                           ),
                         ),
@@ -698,22 +698,22 @@ class CustomerState extends State<Customers> {
                         enabledBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(10),
                           borderSide:
-                              const BorderSide(color: primaryColor, width: 2),
+                              const BorderSide(color: black, width: 2),
                         ),
                         focusedBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(10),
                           borderSide:
-                              const BorderSide(color: primaryColor, width: 2),
+                              const BorderSide(color: black, width: 2),
                         ),
                         errorBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(10),
                           borderSide:
-                              const BorderSide(color: primaryColor, width: 2),
+                              const BorderSide(color: black, width: 2),
                         ),
                         focusedErrorBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(10),
                           borderSide:
-                              const BorderSide(color: primaryColor, width: 2),
+                              const BorderSide(color: black, width: 2),
                         ),
                         fillColor: white,
                         filled: true,
@@ -739,14 +739,14 @@ class CustomerState extends State<Customers> {
                             style: OutlinedButton.styleFrom(
                                 minimumSize: const Size(110, 50),
                                 side: const BorderSide(
-                                    color: primaryColor, width: 2),
+                                    color: button1, width: 2),
                                 shape: RoundedRectangleBorder(
                                     borderRadius: BorderRadius.circular(10))),
                             child: const Text('Cancel',
                                 style: TextStyle(
-                                    color: primaryColor,
+                                    color: black,
                                     fontWeight: FontWeight.bold,
-                                    fontSize: 14))),
+                                    fontSize: 16))),
                         const SizedBox(width: 10),
                         OutlinedButton(
                             onPressed: () {
@@ -772,16 +772,16 @@ class CustomerState extends State<Customers> {
                             },
                             style: OutlinedButton.styleFrom(
                                 minimumSize: const Size(110, 50),
-                                backgroundColor: primaryColor,
+                                backgroundColor: button1,
                                 side: const BorderSide(
-                                    color: primaryColor, width: 2),
+                                    color: button1, width: 2),
                                 shape: RoundedRectangleBorder(
                                     borderRadius: BorderRadius.circular(10))),
                             child: const Text('Add',
                                 style: TextStyle(
-                                    color: Colors.white,
+                                    color: Colors.black,
                                     fontWeight: FontWeight.bold,
-                                    fontSize: 14))),
+                                    fontSize: 16))),
                       ],
                     )
                   ],
@@ -820,10 +820,21 @@ class ShowCustomerInfo extends DataTableSource {
             Text(row.CMobile.toString()),
             Row(
               children: [
-                ...row.clabel!.map((e) => InputChip(
-                  selected: true,
-                  backgroundColor: Colors.white,
-                  label: Text(e),labelStyle: TextStyle(color: Colors.black),)),
+                ...row.clabel!.map((e) => 
+                  Padding(
+                    padding: const EdgeInsets.all(2.0),
+                    child: Container(
+                     decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(10),
+                      color: Colors.grey[200],
+                     ),
+
+                      
+                      child: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Text(e),
+                      )),
+                  )),
               ],
             ),
           ],
@@ -883,7 +894,22 @@ class ShowCustomerInfo extends DataTableSource {
           context: context,
           initialDate: DateTime.now(),
           firstDate: DateTime(1950),
-          lastDate: DateTime.now());
+          lastDate: DateTime.now(),
+           builder: (context, child) {
+                return Theme(
+                  data: ThemeData.light().copyWith(
+                    primaryColor:button1, 
+                    
+                    colorScheme: const ColorScheme.light(
+                      primary: button1, 
+                      onPrimary: Colors.white, 
+                      onSurface: Colors.black, 
+                    ),
+                    dialogBackgroundColor: Colors.white, 
+                  ),
+                  child: child!,
+                );
+              },);
       if (select != null) {
         {
           updatedob.text = DateFormat('dd/MM/yyyy').format(select);
@@ -914,22 +940,22 @@ class ShowCustomerInfo extends DataTableSource {
                 labelStyle: const TextStyle(color: black),
                 enabledBorder: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(10),
-                  borderSide: const BorderSide(color: primaryColor, width: 2),
+                  borderSide: const BorderSide(color: black, width: 2),
                 ),
                 focusedBorder: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(10),
                   borderSide: const BorderSide(
-                    color: primaryColor,
+                    color: black,
                     width: 2,
                   ),
                 ),
                 errorBorder: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(10),
-                  borderSide: const BorderSide(color: primaryColor, width: 2),
+                  borderSide: const BorderSide(color: black, width: 2),
                 ),
                 focusedErrorBorder: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(10),
-                  borderSide: const BorderSide(color: primaryColor, width: 2),
+                  borderSide: const BorderSide(color: black, width: 2),
                 ),
                 fillColor: white,
                 filled: true,
@@ -949,19 +975,19 @@ class ShowCustomerInfo extends DataTableSource {
                 labelStyle: const TextStyle(color: black),
                 enabledBorder: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(10),
-                  borderSide: const BorderSide(color: primaryColor, width: 2),
+                  borderSide: const BorderSide(color: black, width: 2),
                 ),
                 focusedBorder: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(10),
-                  borderSide: const BorderSide(color: primaryColor, width: 2),
+                  borderSide: const BorderSide(color: black, width: 2),
                 ),
                 errorBorder: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(10),
-                  borderSide: const BorderSide(color: primaryColor, width: 2),
+                  borderSide: const BorderSide(color: black, width: 2),
                 ),
                 focusedErrorBorder: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(10),
-                  borderSide: const BorderSide(color: primaryColor, width: 2),
+                  borderSide: const BorderSide(color: black, width: 2),
                 ),
                 fillColor: white,
                 filled: true,
@@ -981,24 +1007,24 @@ class ShowCustomerInfo extends DataTableSource {
                 labelStyle: const TextStyle(color: black),
                 suffixIcon: IconButton(
                     onPressed: () {
-                      //datetimepicker(context);
+                      ///datetimepicker(context);
                     },
                     icon: const Icon(Icons.calendar_month_outlined)),
                 enabledBorder: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(10),
-                  borderSide: const BorderSide(color: primaryColor, width: 2),
+                  borderSide: const BorderSide(color: black, width: 2),
                 ),
                 focusedBorder: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(10),
-                  borderSide: const BorderSide(color: primaryColor, width: 2),
+                  borderSide: const BorderSide(color: black, width: 2),
                 ),
                 errorBorder: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(10),
-                  borderSide: const BorderSide(color: primaryColor, width: 2),
+                  borderSide: const BorderSide(color: black, width: 2),
                 ),
                 focusedErrorBorder: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(10),
-                  borderSide: const BorderSide(color: primaryColor, width: 2),
+                  borderSide: const BorderSide(color: black, width: 2),
                 ),
                 fillColor: white,
                 filled: true,
@@ -1021,19 +1047,19 @@ class ShowCustomerInfo extends DataTableSource {
                 labelStyle: const TextStyle(color: black),
                 enabledBorder: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(10),
-                  borderSide: const BorderSide(color: primaryColor, width: 2),
+                  borderSide: const BorderSide(color: black, width: 2),
                 ),
                 focusedBorder: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(10),
-                  borderSide: const BorderSide(color: primaryColor, width: 2),
+                  borderSide: const BorderSide(color: black, width: 2),
                 ),
                 errorBorder: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(10),
-                  borderSide: const BorderSide(color: primaryColor, width: 2),
+                  borderSide: const BorderSide(color: black, width: 2),
                 ),
                 focusedErrorBorder: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(10),
-                  borderSide: const BorderSide(color: primaryColor, width: 2),
+                  borderSide: const BorderSide(color: black, width: 2),
                 ),
                 fillColor: white,
                 filled: true,
@@ -1057,19 +1083,19 @@ class ShowCustomerInfo extends DataTableSource {
                 labelStyle: const TextStyle(color: black),
                 enabledBorder: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(10),
-                  borderSide: const BorderSide(color: primaryColor, width: 2),
+                  borderSide: const BorderSide(color: black, width: 2),
                 ),
                 focusedBorder: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(10),
-                  borderSide: const BorderSide(color: primaryColor, width: 2),
+                  borderSide: const BorderSide(color: black, width: 2),
                 ),
                 errorBorder: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(10),
-                  borderSide: const BorderSide(color: primaryColor, width: 2),
+                  borderSide: const BorderSide(color: black, width: 2),
                 ),
                 focusedErrorBorder: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(10),
-                  borderSide: const BorderSide(color: primaryColor, width: 2),
+                  borderSide: const BorderSide(color: black, width: 2),
                 ),
                 fillColor: white,
                 filled: true,
@@ -1094,14 +1120,14 @@ class ShowCustomerInfo extends DataTableSource {
                     },
                     style: OutlinedButton.styleFrom(
                         minimumSize: const Size(110, 50),
-                        side: const BorderSide(color: primaryColor, width: 2),
+                        side: const BorderSide(color: button1, width: 2),
                         shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(10))),
                     child: const Text('Clear',
                         style: TextStyle(
-                            color: primaryColor,
+                            color: black,
                             fontWeight: FontWeight.bold,
-                            fontSize: 14))),
+                            fontSize: 16))),
                 const SizedBox(width: 10),
                 OutlinedButton(
                   onPressed: () {
@@ -1120,15 +1146,15 @@ class ShowCustomerInfo extends DataTableSource {
                   },
                   style: OutlinedButton.styleFrom(
                       minimumSize: const Size(110, 50),
-                      backgroundColor: primaryColor,
-                      side: const BorderSide(color: primaryColor, width: 2),
+                      backgroundColor: button1,
+                      side: const BorderSide(color: button1, width: 2),
                       shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(10))),
                   child: const Text('Update',
                       style: TextStyle(
-                          color: Colors.white,
+                          color: black,
                           fontWeight: FontWeight.bold,
-                          fontSize: 14)),
+                          fontSize: 16)),
                 ),
               ],
             )

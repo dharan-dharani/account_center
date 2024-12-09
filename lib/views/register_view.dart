@@ -69,7 +69,7 @@ class Signup extends State<Register> {
                           ),
                           prefixIcon: const Icon(
                             Icons.person,
-                            color: primaryColor,
+                            color: button,
                           ),
                           floatingLabelBehavior: FloatingLabelBehavior.auto,
                           enabledBorder: OutlineInputBorder(
@@ -113,7 +113,7 @@ class Signup extends State<Register> {
                           ),
                           prefixIcon: const Icon(
                             Icons.person,
-                            color: primaryColor,
+                            color: button,
                           ),
                           floatingLabelBehavior: FloatingLabelBehavior.auto,
                           enabledBorder: OutlineInputBorder(
@@ -156,7 +156,7 @@ class Signup extends State<Register> {
                             ),
                           ),
                           prefixIcon:
-                              const Icon(Icons.phone, color: primaryColor),
+                              const Icon(Icons.phone, color: button),
                           floatingLabelBehavior: FloatingLabelBehavior.auto,
                           enabledBorder: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(10),
@@ -198,7 +198,7 @@ class Signup extends State<Register> {
                             ),
                           ),
                           prefixIcon:
-                              const Icon(Icons.email, color: primaryColor),
+                              const Icon(Icons.email, color: button),
                           floatingLabelBehavior: FloatingLabelBehavior.auto,
                           enabledBorder: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(10),
@@ -240,7 +240,7 @@ class Signup extends State<Register> {
                             ),
                           ),
                           prefixIcon:
-                              const Icon(Icons.password, color: primaryColor),
+                              const Icon(Icons.password, color: button),
                           floatingLabelBehavior: FloatingLabelBehavior.auto,
                           enabledBorder: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(10),
@@ -276,16 +276,16 @@ class Signup extends State<Register> {
                           },
                           style: OutlinedButton.styleFrom(
                               minimumSize: const Size(110, 50),
-                              backgroundColor: primaryColor,
+                              backgroundColor: button,
                               side: const BorderSide(
-                                  color: primaryColor, width: 2),
+                                  color: button, width: 2),
                               shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(10))),
                           child: const Text('Register',
                               style: TextStyle(
-                                  color: Colors.white,
+                                  color: Colors.black,
                                   fontWeight: FontWeight.bold,
-                                  fontSize: 14))),
+                                  fontSize: 16))),
                       const SizedBox(height: 20),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,

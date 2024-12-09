@@ -69,7 +69,7 @@ class FormPage extends State<Login> {
                           ),
                           prefixIcon: const Icon(
                             Icons.email,
-                            color: primaryColor,
+                            color: button,
                           ),
                           floatingLabelBehavior: FloatingLabelBehavior.auto,
                           enabledBorder: OutlineInputBorder(
@@ -113,7 +113,7 @@ class FormPage extends State<Login> {
                           ),
                           prefixIcon: const Icon(
                             Icons.password,
-                            color: primaryColor,
+                            color: button,
                           ),
                           floatingLabelBehavior: FloatingLabelBehavior.auto,
                           enabledBorder: OutlineInputBorder(
@@ -151,16 +151,16 @@ class FormPage extends State<Login> {
                           },
                           style: OutlinedButton.styleFrom(
                               minimumSize: const Size(110, 50),
-                              backgroundColor: primaryColor,
+                              backgroundColor: button,
                               side: const BorderSide(
-                                  color: primaryColor, width: 2),
+                                  color: button, width: 2),
                               shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(10))),
                           child: const Text('Login',
                               style: TextStyle(
-                                  color: Colors.white,
+                                  color: Colors.black,
                                   fontWeight: FontWeight.bold,
-                                  fontSize: 14))),
+                                  fontSize: 16))),
                       const SizedBox(height: 20),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,

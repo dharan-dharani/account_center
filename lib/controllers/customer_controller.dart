@@ -42,10 +42,26 @@ class CustomerController extends GetxController {
         context: context,
         initialDate: DateTime.now(),
         firstDate: DateTime(1950),
-        lastDate: DateTime.now());
+        lastDate: DateTime.now(),
+         builder: (context, child) {
+                return Theme(
+                  data: ThemeData.light().copyWith(
+                    primaryColor:button1, 
+                    
+                    colorScheme: const ColorScheme.light(
+                      primary: button1, 
+                      onPrimary: Colors.white, 
+                      onSurface: Colors.black, 
+                    ),
+                    dialogBackgroundColor: Colors.white, 
+                  ),
+                  child: child!,
+                );
+              },);
     if (select != null) {
       dob.text = DateFormat('dd/MM/yyyy').format(select);
     }
+    
   }
 
 // filter customer
