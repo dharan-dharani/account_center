@@ -23,15 +23,14 @@ class CustomerController extends GetxController {
   final TextEditingController list = TextEditingController();
   final TextEditingController searchlist = TextEditingController();
   final forms = GlobalKey<FormState>();
+  RxString query = ''.obs;
+  RxString querylist = ''.obs;
 
   var customerdata = <customer>[].obs;
   var chipslist = <Chiplist>[].obs;
 
   late Rx<ShowCustomerInfo> showCustomerInfo;
   RxBool isSelectAll = false.obs;
-
-  var filteredData = <customer>[].obs;
-  var filteredlabellist = <Chiplist>[].obs;
 
   var selectedlabel = <String>[].obs;
   var listOfCustomer = <String>[].obs;
@@ -51,15 +50,16 @@ class CustomerController extends GetxController {
 
 // filter customer
 
-  void filterData(String query) {
+  List<customer> get filterData {
     if (query.isEmpty) {
-      filteredData.value = customerdata;
+      return customerdata;
     } else {
-      filteredData.value = customerdata
+      return customerdata
           .where((customer) =>
               customer.CName.toLowerCase().contains(query.toLowerCase()) ||
               customer.Email.toLowerCase().contains(query.toLowerCase()))
           .toList();
+      //print(filteredData);
     }
   }
 
@@ -107,27 +107,27 @@ class CustomerController extends GetxController {
 
   Future<void> deleteSelectedCustomers() async {
     if (listOfCustomer.isEmpty) {
-      Get.snackbar(
-        'Customer',
-        ' No customers selected for deletion.',
-        snackPosition: SnackPosition.BOTTOM,
-      );
+      // Get.snackbar(
+      //   'Customer',
+      //   ' No customers selected for deletion.',
+      //   snackPosition: SnackPosition.BOTTOM,
+      // );
       return;
     }
     try {
       await deleteCustomer(listOfCustomer);
       listOfCustomer.clear();
-      Get.snackbar(
-        'Customer',
-        ' Selected customers deleted successfully!',
-        snackPosition: SnackPosition.BOTTOM,
-      );
+      // Get.snackbar(
+      //   'Customer',
+      //   ' Selected customers deleted successfully!',
+      //   snackPosition: SnackPosition.BOTTOM,
+      // );
     } catch (e) {
-      Get.snackbar(
-        'Customer',
-        ' Failed to delete customers.',
-        snackPosition: SnackPosition.BOTTOM,
-      );
+      // Get.snackbar(
+      //   'Customer',
+      //   ' Failed to delete customers.',
+      //   snackPosition: SnackPosition.BOTTOM,
+      // );
     }
   }
 
@@ -151,17 +151,16 @@ class CustomerController extends GetxController {
 
 // filter label
 
-  // void filterDatalist(String query, Function() refreshParent) {
-  //   if (query.isEmpty) {
-  //     filteredlabellist. = chipslist;
-  //   } else {
-  //     filteredlabellist = chipslist
-  //         .where((list) =>
-  //             list.chipname.toLowerCase().contains(query.toLowerCase()))
-  //         .toList();
-  //   }
-  //   refreshParent();
-  // }
+  List<Chiplist> get filterDatalist {
+    if (querylist.isEmpty) {
+     return chipslist;
+    } else {
+      return chipslist
+          .where((list) =>
+              list.chipname.toLowerCase().contains(querylist.toLowerCase()))
+          .toList();
+    }
+  }
 // Compresser & Decompressor
 
   customerDecompresser({data}) {
@@ -197,6 +196,7 @@ class CustomerController extends GetxController {
       customerdata.value = dataList.map((json) {
         return customer.fromJson(json);
       }).toList();
+      
     } catch (e) {
       print('Error fetching products: $e');
     }
@@ -259,13 +259,32 @@ class CustomerController extends GetxController {
           'Customer',
           ' Added Successfull',
           snackPosition: SnackPosition.BOTTOM,
+          margin:
+              const EdgeInsets.only(left: 700, top: 10, bottom: 10, right: 16),
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+          borderRadius: 8,
+          backgroundColor: Colors.black,
+          colorText: Colors.white,
+          forwardAnimationCurve: Curves.easeOutBack,
+          animationDuration: const Duration(milliseconds: 800),
+          isDismissible: true,
         );
 
         await customerController.fetchlist();
       } else {
         Get.snackbar(
-          'Customer', ' Added Failed',
-          snackPosition: SnackPosition.BOTTOM, // Position
+          'Customer',
+          ' Added Failed',
+          snackPosition: SnackPosition.BOTTOM,
+          margin:
+              const EdgeInsets.only(left: 700, top: 10, bottom: 10, right: 16),
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+          borderRadius: 8,
+          backgroundColor: Colors.black,
+          colorText: Colors.white,
+          forwardAnimationCurve: Curves.easeOutBack,
+          animationDuration: const Duration(milliseconds: 800),
+          isDismissible: true,
         );
       }
     } catch (e) {
@@ -301,23 +320,32 @@ class CustomerController extends GetxController {
           "Label",
           " Added Successfully",
           snackPosition: SnackPosition.BOTTOM,
-          backgroundColor: Colors.black,
-          maxWidth: 600,
-          margin: EdgeInsets.all(10),
+          margin:
+              const EdgeInsets.only(left: 700, top: 10, bottom: 10, right: 16),
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
           borderRadius: 8,
+          backgroundColor: Colors.black,
           colorText: Colors.white,
+          forwardAnimationCurve: Curves.easeOutBack,
+          animationDuration: const Duration(milliseconds: 800),
+          isDismissible: true,
         );
+
         await customerController.fetchlabellist();
       } else {
         Get.snackbar(
           "Label",
           " Added Failed",
           snackPosition: SnackPosition.BOTTOM,
-          backgroundColor: Colors.black,
-          maxWidth: 600,
-          margin: EdgeInsets.all(10),
+          margin:
+              const EdgeInsets.only(left: 700, top: 10, bottom: 10, right: 16),
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
           borderRadius: 8,
+          backgroundColor: Colors.black,
           colorText: Colors.white,
+          forwardAnimationCurve: Curves.easeOutBack,
+          animationDuration: const Duration(milliseconds: 800),
+          isDismissible: true,
         );
       }
     } catch (e) {
@@ -359,6 +387,15 @@ class CustomerController extends GetxController {
           'Customer',
           ' Updated Successfull',
           snackPosition: SnackPosition.BOTTOM,
+          margin:
+              const EdgeInsets.only(left: 700, top: 10, bottom: 10, right: 16),
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+          borderRadius: 8,
+          backgroundColor: Colors.black,
+          colorText: Colors.white,
+          forwardAnimationCurve: Curves.easeOutBack,
+          animationDuration: const Duration(milliseconds: 800),
+          isDismissible: true,
         );
         await customerController.fetchlist();
       } else {
@@ -366,6 +403,15 @@ class CustomerController extends GetxController {
           'Customer',
           ' Update Failed',
           snackPosition: SnackPosition.BOTTOM,
+          margin:
+              const EdgeInsets.only(left: 700, top: 10, bottom: 10, right: 16),
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+          borderRadius: 8,
+          backgroundColor: Colors.black,
+          colorText: Colors.white,
+          forwardAnimationCurve: Curves.easeOutBack,
+          animationDuration: const Duration(milliseconds: 800),
+          isDismissible: true,
         );
       }
     } catch (e) {
@@ -416,11 +462,15 @@ class CustomerController extends GetxController {
           "Label",
           " Assign Successfully",
           snackPosition: SnackPosition.BOTTOM,
-          backgroundColor: Colors.black,
-          maxWidth: 600,
-          margin: EdgeInsets.all(10),
+          margin:
+              const EdgeInsets.only(left: 700, top: 10, bottom: 10, right: 16),
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
           borderRadius: 8,
+          backgroundColor: Colors.black,
           colorText: Colors.white,
+          forwardAnimationCurve: Curves.easeOutBack,
+          animationDuration: const Duration(milliseconds: 800),
+          isDismissible: true,
         );
         customerController.clearcustomer(false);
         await customerController.fetchlist();
@@ -429,11 +479,15 @@ class CustomerController extends GetxController {
           "Label",
           " Assign Failed",
           snackPosition: SnackPosition.BOTTOM,
-          backgroundColor: Colors.black,
-          maxWidth: 600,
-          margin: EdgeInsets.all(10),
+          margin:
+              const EdgeInsets.only(left: 700, top: 10, bottom: 10, right: 16),
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
           borderRadius: 8,
+          backgroundColor: Colors.black,
           colorText: Colors.white,
+          forwardAnimationCurve: Curves.easeOutBack,
+          animationDuration: const Duration(milliseconds: 800),
+          isDismissible: true,
         );
       }
     } catch (e) {
@@ -453,7 +507,7 @@ class CustomerController extends GetxController {
       Map<String, dynamic> listofids = {"ids": id};
       var listofidsEncode = jsonEncode(listofids);
       var encodedlist = customerCompresser(data: listofidsEncode.toString());
-      var data = {"id": encodedlist};
+      var data = {"encodedString": encodedlist};
       String? body = json.encode(data);
 
       var response = await http.post(
@@ -464,14 +518,23 @@ class CustomerController extends GetxController {
         },
         body: body,
       );
-      print(body);
-      print(response.body);
-      print(response.statusCode);
+      // print(body);
+      // print(response.body);
+      // print(response.statusCode);
       if (response.statusCode == 200) {
         Get.snackbar(
           'Customer',
           ' Delete Successfull',
           snackPosition: SnackPosition.BOTTOM,
+          margin:
+              const EdgeInsets.only(left: 700, top: 10, bottom: 10, right: 16),
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+          borderRadius: 8,
+          backgroundColor: Colors.black,
+          colorText: Colors.white,
+          forwardAnimationCurve: Curves.easeOutBack,
+          animationDuration: const Duration(milliseconds: 800),
+          isDismissible: true,
         );
         await customerController.fetchlist();
       } else if (response.statusCode == 500) {
@@ -479,12 +542,30 @@ class CustomerController extends GetxController {
           'Customer',
           ' Error',
           snackPosition: SnackPosition.BOTTOM,
+          margin:
+              const EdgeInsets.only(left: 700, top: 10, bottom: 10, right: 16),
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+          borderRadius: 8,
+          backgroundColor: Colors.black,
+          colorText: Colors.white,
+          forwardAnimationCurve: Curves.easeOutBack,
+          animationDuration: const Duration(milliseconds: 800),
+          isDismissible: true,
         );
       } else {
         Get.snackbar(
           'Customer',
           ' Delete Failed ',
           snackPosition: SnackPosition.BOTTOM,
+          margin:
+              const EdgeInsets.only(left: 700, top: 10, bottom: 10, right: 16),
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+          borderRadius: 8,
+          backgroundColor: Colors.black,
+          colorText: Colors.white,
+          forwardAnimationCurve: Curves.easeOutBack,
+          animationDuration: const Duration(milliseconds: 800),
+          isDismissible: true,
         );
       }
     } catch (e) {
@@ -520,11 +601,15 @@ class CustomerController extends GetxController {
           "Label",
           " Delete Successfully",
           snackPosition: SnackPosition.BOTTOM,
-          backgroundColor: Colors.black,
-          maxWidth: 600,
-          margin: EdgeInsets.all(10),
+          margin:
+              const EdgeInsets.only(left: 700, top: 10, bottom: 10, right: 16),
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
           borderRadius: 8,
+          backgroundColor: Colors.black,
           colorText: Colors.white,
+          forwardAnimationCurve: Curves.easeOutBack,
+          animationDuration: const Duration(milliseconds: 800),
+          isDismissible: true,
         );
         await customerController.fetchlabellist();
       } else if (response.statusCode == 500) {
@@ -532,22 +617,30 @@ class CustomerController extends GetxController {
           "Label",
           " Error ",
           snackPosition: SnackPosition.BOTTOM,
-          backgroundColor: Colors.black,
-          maxWidth: 600,
-          margin: EdgeInsets.all(10),
+          margin:
+              const EdgeInsets.only(left: 700, top: 10, bottom: 10, right: 16),
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
           borderRadius: 8,
+          backgroundColor: Colors.black,
           colorText: Colors.white,
+          forwardAnimationCurve: Curves.easeOutBack,
+          animationDuration: const Duration(milliseconds: 800),
+          isDismissible: true,
         );
       } else {
         Get.snackbar(
           "Label",
           " Delete Failed",
           snackPosition: SnackPosition.BOTTOM,
-          backgroundColor: Colors.black,
-          maxWidth: 600,
-          margin: EdgeInsets.all(10),
+          margin:
+              const EdgeInsets.only(left: 700, top: 10, bottom: 10, right: 16),
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
           borderRadius: 8,
+          backgroundColor: Colors.black,
           colorText: Colors.white,
+          forwardAnimationCurve: Curves.easeOutBack,
+          animationDuration: const Duration(milliseconds: 800),
+          isDismissible: true,
         );
       }
     } catch (e) {

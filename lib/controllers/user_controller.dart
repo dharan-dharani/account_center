@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import 'package:account_center/constant.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -50,11 +51,35 @@ class UserController {
       //print(body);
 
       if (response.statusCode == 200) {
-        ScaffoldMessenger.of(context)
-            .showSnackBar(const SnackBar(content: Text('Sign up Sucessfull')));
+        Get.snackbar(
+          'Register ',
+          'Successfully',
+          snackPosition: SnackPosition.BOTTOM,
+          margin: const EdgeInsets.only(left: 700, top: 10, bottom: 10,
+          right: 16),
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+          borderRadius: 8,
+          backgroundColor: Colors.black,
+          colorText: Colors.white,
+          forwardAnimationCurve: Curves.easeOutBack,
+          animationDuration: const Duration(milliseconds: 800),
+          isDismissible: true,
+        );
       } else {
-        ScaffoldMessenger.of(context)
-            .showSnackBar(const SnackBar(content: Text('Sign up failed')));
+        Get.snackbar(
+          'Register ',
+          'Failed',
+          snackPosition: SnackPosition.BOTTOM,
+          margin: const EdgeInsets.only(left: 700, top: 10, bottom: 10,
+          right: 16),
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+          borderRadius: 8,
+          backgroundColor: Colors.black,
+          colorText: Colors.white,
+          forwardAnimationCurve: Curves.easeOutBack,
+          animationDuration: const Duration(milliseconds: 800),
+          isDismissible: true,
+        );
       }
     } catch (e) {
       print("agent_error: $e");
@@ -83,8 +108,21 @@ class UserController {
       // print(response.statusCode);
       // print(response.body);
       if (response.statusCode == 200) {
-        ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(content: Text('Sign in  Successfull...')));
+        Get.snackbar(
+          'Login ',
+          'Successfully',
+          snackPosition: SnackPosition.BOTTOM,
+          margin: const EdgeInsets.only(left: 700, top: 10, bottom: 10,
+          right: 16),
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+          borderRadius: 8,
+          backgroundColor: Colors.black,
+          colorText: Colors.white,
+          forwardAnimationCurve: Curves.easeOutBack,
+          animationDuration: const Duration(milliseconds: 800),
+          isDismissible: true,
+        );
+
         var token = response.headers['token'];
         //print(token);
         if (token != null) {
@@ -100,12 +138,23 @@ class UserController {
           print("Token not found in response headers.");
         }
       } else {
-        ScaffoldMessenger.of(context)
-            .showSnackBar(const SnackBar(content: Text('Sign in failed')));
+         Get.snackbar(
+          'Login ',
+          'Failed',
+          snackPosition: SnackPosition.BOTTOM,
+          margin: const EdgeInsets.only(left: 700, top: 10, bottom: 10,
+          right: 16),
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+          borderRadius: 8,
+          backgroundColor: Colors.black,
+          colorText: Colors.white,
+          forwardAnimationCurve: Curves.easeOutBack,
+          animationDuration: const Duration(milliseconds: 800),
+          isDismissible: true,
+        );
       }
     } catch (e) {
       print("login_error: $e");
     }
   }
 }
-

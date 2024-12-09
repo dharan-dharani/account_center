@@ -20,7 +20,7 @@ class CustomerState extends State<Customers> {
   @override
   void initState() {
     super.initState();
-    customerController.filteredData.value = customerController.customerdata;
+
     customerController.fetchlist();
     customerController.fetchlabellist();
   }
@@ -60,7 +60,9 @@ class CustomerState extends State<Customers> {
             Row(
               children: [
                 OutlinedButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      Get.back();
+                    },
                     style: OutlinedButton.styleFrom(
                         minimumSize: const Size(110, 50),
                         side: const BorderSide(color: primaryColor, width: 2),
@@ -75,6 +77,7 @@ class CustomerState extends State<Customers> {
                 OutlinedButton(
                     onPressed: () {
                       customerController.assignlistlabel();
+                      Get.back();
                     },
                     style: OutlinedButton.styleFrom(
                         minimumSize: const Size(110, 50),
@@ -147,9 +150,8 @@ class CustomerState extends State<Customers> {
                                   prefixIcon: const Icon(Icons.search),
                                   suffixIcon: IconButton(
                                       onPressed: () {
+                                        customerController.query.value = '';
                                         customerController.search.clear();
-
-                                        customerController.filterData('');
                                       },
                                       icon: const Icon(Icons.close)),
                                   contentPadding: const EdgeInsets.symmetric(
@@ -165,9 +167,9 @@ class CustomerState extends State<Customers> {
                                         color: primaryColor, width: 2.0),
                                   ),
                                 ),
-                                onChanged: (query) {
-                                  customerController.filterData(query);
-                                  print(query);
+                                onChanged: (value) {
+                                  customerController.query.value = value;
+                                  //print(query);
                                 },
                               ),
                             ),
@@ -275,7 +277,7 @@ class CustomerState extends State<Customers> {
                           ),
                         )),
                       ],
-                      source: ShowCustomerInfo(customerController.filteredData),
+                      source: ShowCustomerInfo(customerController.filterData),
                       dataRowMaxHeight: 80,
                       headingRowColor:
                           const WidgetStatePropertyAll(Colors.white),
@@ -353,7 +355,10 @@ class CustomerState extends State<Customers> {
                                         // crossAxisAlignment: CrossAxisAlignment.baseline,
                                         children: [
                                           OutlinedButton(
-                                              onPressed: () {},
+                                              onPressed: () {
+                                                customerController.list.clear();
+                                                Get.back();
+                                              },
                                               style: OutlinedButton.styleFrom(
                                                   minimumSize:
                                                       const Size(110, 50),
@@ -376,6 +381,7 @@ class CustomerState extends State<Customers> {
                                                 customerController.addlistlabel(
                                                     customerController
                                                         .list.text);
+                                                Get.back();
                                               },
                                               style: OutlinedButton.styleFrom(
                                                   minimumSize:
@@ -419,13 +425,18 @@ class CustomerState extends State<Customers> {
                       width: 220,
                       height: 40,
                       child: TextFormField(
+                        controller: customerController.searchlist,
                         decoration: InputDecoration(
                           fillColor: white,
                           filled: true,
                           hintText: 'Search List',
                           prefixIcon: const Icon(Icons.search),
                           suffixIcon: IconButton(
-                              onPressed: () {}, icon: const Icon(Icons.close)),
+                              onPressed: () {
+                                customerController.querylist.value = '';
+                                customerController.list.clear();
+                              },
+                              icon: const Icon(Icons.close)),
                           contentPadding: const EdgeInsets.symmetric(
                               vertical: 5, horizontal: 5),
                           enabledBorder: OutlineInputBorder(
@@ -439,15 +450,17 @@ class CustomerState extends State<Customers> {
                                 color: primaryColor, width: 2.0),
                           ),
                         ),
+                        onChanged: (value) {
+                          customerController.querylist.value = value;
+                          //print(query);
+                        },
                       ),
                     ),
                     Expanded(child: Obx(
                       () {
                         return ListView.builder(
-                            itemCount: customerController.chipslist.length,
+                            itemCount: customerController.filterDatalist.length,
                             itemBuilder: (context, index) {
-                              print(customerController.chipslist.length);
-
                               return Padding(
                                 padding: const EdgeInsets.all(8.0),
                                 child: Container(
@@ -469,17 +482,13 @@ class CustomerState extends State<Customers> {
                                       maxRadius: 20,
                                     ),
                                     title: Text(customerController
-                                        .chipslist[index].chipname),
-                                    subtitle: const Text(
-                                      '(0) Contacts',
-                                      style: TextStyle(
-                                          color: Colors.grey, fontSize: 12),
-                                    ),
+                                        .filterDatalist[index].chipname),
                                     trailing: InkWell(
                                       onTap: () {
                                         customerController.deleteListlabel(
                                             customerController
-                                                .chipslist[index].chipname);
+                                                .filterDatalist[index]
+                                                .chipname);
                                       },
                                       child: const Icon(
                                           Icons.delete_outline_outlined),
@@ -783,14 +792,6 @@ class CustomerState extends State<Customers> {
 }
 
 class ShowCustomerInfo extends DataTableSource {
-  //final BuildContext context;
-  // final List<customer> data;
-  // ShowCustomerInfo(
-  //  {
-  //   //required this.context,
-  //    this.data,
-  // });
-
   final List<customer> data;
 
   ShowCustomerInfo(this.data);
@@ -819,7 +820,10 @@ class ShowCustomerInfo extends DataTableSource {
             Text(row.CMobile.toString()),
             Row(
               children: [
-                Text(row.clabel.toString()),
+                ...row.clabel!.map((e) => InputChip(
+                  selected: true,
+                  backgroundColor: Colors.white,
+                  label: Text(e),labelStyle: TextStyle(color: Colors.black),)),
               ],
             ),
           ],
