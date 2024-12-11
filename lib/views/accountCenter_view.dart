@@ -10,6 +10,7 @@ import 'package:account_center/views/paymentsdetails/paymentdetail_view.dart';
 import 'package:account_center/views/plan/plan_view.dart';
 import 'package:flutter/material.dart';
 
+
 class Accountcenter extends StatefulWidget {
   const Accountcenter({super.key});
 
@@ -140,21 +141,7 @@ class _AccountcenterState extends State<Accountcenter> {
                                             fontWeight: FontWeight.bold,
                                           ),
                                         )),
-                                    TextButton(
-                                        onPressed: () {
-                                          // Navigator.push(
-                                          //     context,
-                                          //     MaterialPageRoute(
-                                          //         builder: (context) =>
-                                          //             const Login()));
-                                        },
-                                        child: const Text(
-                                          'Logout',
-                                          style: TextStyle(
-                                            color: black,
-                                            fontWeight: FontWeight.bold,
-                                          ),
-                                        )),
+                                    
                                   ],
                                 ),
                               )

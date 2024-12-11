@@ -456,10 +456,10 @@ class CustomerController extends GetxController {
       // };
 
       var data = {
-        "encodedString": encodedlabel,
+        "customerIds": encodedlabel,
         "label": selectedlabel,
       };
-      print(selectedlabel);
+     // print(selectedlabel);
       String? body = json.encode(data);
 
       var response = await http.post(
@@ -470,9 +470,9 @@ class CustomerController extends GetxController {
         },
         body: body,
       );
-      print(body);
+     // print(body);
 
-      print(response.statusCode);
+      //print(response.statusCode);
       if (response.statusCode == 200) {
         Get.snackbar(
           "Label",
@@ -523,7 +523,7 @@ class CustomerController extends GetxController {
       Map<String, dynamic> listofids = {"ids": id};
       var listofidsEncode = jsonEncode(listofids);
       var encodedlist = customerCompresser(data: listofidsEncode.toString());
-      var data = {"encodedString": encodedlist};
+      var data = {"encryptedIds": encodedlist};
       String? body = json.encode(data);
 
       var response = await http.post(
@@ -534,9 +534,9 @@ class CustomerController extends GetxController {
         },
         body: body,
       );
-      // print(body);
-      // print(response.body);
-      // print(response.statusCode);
+      print(body);
+      print(response.body);
+      print(response.statusCode);
       if (response.statusCode == 200) {
         Get.snackbar(
           'Customer',

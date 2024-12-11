@@ -185,11 +185,9 @@ class CustomerState extends State<Customers> {
                                         borderRadius:
                                             BorderRadius.circular(10))),
                                 child: Text(
-                                    customerController.isSelectAll.value ||
-                                            customerController
-                                                .listOfCustomer.isNotEmpty
-                                        ? 'Delete'
-                                        : 'Import',
+                                    
+                                         'Delete',
+                                      
                                     style: const TextStyle(
                                         color: black,
                                         fontWeight: FontWeight.bold,
@@ -381,6 +379,7 @@ class CustomerState extends State<Customers> {
                                                     customerController
                                                         .list.text);
                                                 Get.back();
+                                                customerController.list.clear();
                                               },
                                               style: OutlinedButton.styleFrom(
                                                   minimumSize:
