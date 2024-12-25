@@ -27,6 +27,8 @@ class CustomerController extends GetxController {
   RxString querylist = ''.obs;
 
   var customerdata = <customer>[].obs;
+
+  
   var chipslist = <Chiplist>[].obs;
 
   late Rx<ShowCustomerInfo> showCustomerInfo;
